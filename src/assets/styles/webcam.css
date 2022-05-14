@@ -1,0 +1,11 @@
+
+.webcam {
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 9;
+    width: 640px;
+    height: 480px;
+}
