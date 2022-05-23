@@ -12,10 +12,14 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    image : {
+        type : String,
+        required : true
+    },
     enrollmentNo : {
         type : String,
         required : true,
-        length : [11, 'Enrollment No. must be 11 digit long'],
+        length : 10,
         unique : true,
         index : true
     },

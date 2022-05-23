@@ -10,4 +10,4 @@ const sendToken =  (user, res)=>{
 }
 
 
-module.exports = {sendToken}
+module.exports = sendToken

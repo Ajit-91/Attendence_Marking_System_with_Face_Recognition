@@ -25,7 +25,7 @@ app.use(cors({ origin: true, credentials: true }))
 //  -----------Routes-----------------------------
 app.use("/api", require("./server/routes/commonRoutes"))
 app.use("/api/admin", require("./server/routes/adminRoutes"))
-// app.use("/api/student", require("./server/routes/studentRoutes"))
+app.use("/api/student", require("./server/routes/studentRoutes"))
 
 // ----------deployment---------------------------
 

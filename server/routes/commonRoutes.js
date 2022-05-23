@@ -3,6 +3,6 @@ const { loginUser } = require("../controllers/commonController");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const router = express.Router()
 
-router.post('/login', isAuthenticated, loginUser)
+router.post('/login', loginUser)
 
 module.exports = router

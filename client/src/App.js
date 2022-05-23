@@ -8,7 +8,7 @@ import AuthLayout from "./Layout/AuthLayout";
 import "./assets/styles/App.css";
 
 const App =() =>  {
-  const user = useSelector(selectUser)
+  const user = useSelector(selectUser) || "user1"
 
   return (
     <div >

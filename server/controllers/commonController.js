@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const catchErrors = require('../utils/catchErrors');
-const { successResponse } = require('../utils/response')
+const { successResponse, errorResponse } = require('../utils/response');
+const sendToken = require('../utils/sendToken');
 
 // ============Login User===============
 
