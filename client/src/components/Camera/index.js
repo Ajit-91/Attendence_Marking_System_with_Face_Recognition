@@ -1,67 +1,72 @@
 import React, { useEffect, useRef } from 'react'
-import * as tf from "@tensorflow/tfjs";
-import * as cocossd from "@tensorflow-models/coco-ssd";
 import Webcam from "react-webcam";
-import { drawRect } from '../../utils/drawing';
+import * as faceapi from 'face-api.js'
 import "../../assets/styles/webcam.css"
+import { Button } from '@mui/material';
 
 const Camera = () => {
-    const webcamRef = useRef(null);
+    const videoRef = useRef(null);
     const canvasRef = useRef(null);
+    const videoWidth = 720
+    const videoHeight = 560
+    const MODELS_URI = '/models'
 
-    const detect = async (net) => {
-        // Checking if data is available then performing detections
-        console.log('webRef', webcamRef)
-        if (
-            typeof webcamRef.current !== "undefined" &&
-            webcamRef.current !== null &&
-            webcamRef.current.video.readyState === 4
-        ) {
-            // Get Video Properties
-            const video = webcamRef.current.video;
-            const videoWidth = webcamRef.current.video.videoWidth;
-            const videoHeight = webcamRef.current.video.videoHeight;
-
-            // Set video width
-            webcamRef.current.video.width = videoWidth;
-            webcamRef.current.video.height = videoHeight;
-
-            // Set canvas height and width
-            canvasRef.current.width = videoWidth;
-            canvasRef.current.height = videoHeight;
-
-            // Make Detections
-            const obj = await net.detect(video);
-            console.log(obj)
-            // Drawing the rectangles around object
-            const ctx = canvasRef.current.getContext("2d");
-            drawRect(obj, ctx);
-        }
-    };
+    const startVideo = () => {
+        navigator.getUserMedia(
+            { video: {} },
+            stream => videoRef.current.srcObject = stream,
+            err => console.error(err)
+        )
+        console.log('v statrted')
+    }
 
     useEffect(() => {
-        const runCoco = async () => {
-            const net = await cocossd.load();
-            //  Detecting objects after every 10ms
-            setInterval(() => {
-                detect(net);
-            }, 10);
-        };
-        runCoco()
+        console.log('video starting')
+        Promise.all([
+            faceapi.nets.tinyFaceDetector.loadFromUri(MODELS_URI),
+            faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URI),
+            faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URI),
+            faceapi.nets.faceExpressionNet.loadFromUri(MODELS_URI)
+        ]).then(() => {
+            console.log('models loaded')
+            startVideo()
+        }).catch(err => {
+            console.log('video err', err)
+        })
     }, [])
+
+    const handleVideoPlay = () => {
+        console.log('play called')
+        console.log('ref', videoRef)
+        if (
+            // typeof videoRef.current !== "undefined" &&
+            // navigator.mediaDevices.getUserMedia
+            // videoRef.current.video.readyState === 4
+            videoRef.current
+        ) {
+            console.log('inside play called')
+
+            canvasRef.current.innerHtml = faceapi.createCanvasFromMedia(videoRef.current)
+            const displaySize = { width: videoWidth, height: videoHeight }
+            faceapi.matchDimensions(canvasRef.current, displaySize)
+            setInterval(async () => {
+                const detections = await faceapi.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+                    .withFaceLandmarks()
+                    .withFaceExpressions()
+                console.log(detections)
+                const resizedDetections = faceapi.resizeResults(detections, displaySize)
+                canvasRef.current.getContext('2d').clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
+                faceapi.draw.drawDetections(canvasRef.current, resizedDetections)
+                faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections)
+                faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections)
+            }, 100)
+        }
+    }
 
     return (
         <>
-            <Webcam
-                ref={webcamRef}
-                muted={true}
-                className='webcam'
-            />
-
-            <canvas
-                ref={canvasRef}
-                className='webcam'
-            />
+            <video ref={videoRef} autoPlay muted onPlay={handleVideoPlay} ></video>
+            <canvas ref={canvasRef} style={{ position: 'absolute', left : 0, top : 0 }} ></canvas>
         </>
     )
 }

@@ -1,4 +1,4 @@
-
+/* 
 .webcam {
     position: absolute;
     margin: 0 auto;
@@ -8,4 +8,26 @@
     z-index: 9;
     width: 640px;
     height: 480px;
-}
+} */
+
+#video {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 350px;
+    left: 450px;
+  }
+  
+  #canvas {
+    position: absolute;
+    top: 350px;
+    left: 450px;
+    z-index: 10;
+  }
+  
+  #video-container {
+    margin: 0 auto;
+    margin-top: 50px;
+    position: center;
+    justify-content: center;
+  }
