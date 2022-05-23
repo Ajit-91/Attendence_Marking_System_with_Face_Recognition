@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import Camera from "./components/Camera";
+import { useSelector } from "react-redux";
+import { selectUser } from "./redux/slices/userSlice";
+
+import AdminLayout from "./Layout/AdminLayout";
+import StudentLayout from "./Layout/StudentLayout";
+import AuthLayout from "./Layout/AuthLayout";
 import "./assets/styles/App.css";
-import {Button} from '@mui/material'
+
 const App =() =>  {
-  const [toggleCamera, setToggleCamera] = useState(false)
+  const user = useSelector(selectUser)
+
   return (
     <div >
-      {toggleCamera && <Camera /> }
-      <Button color="success" variant="outlined" onClick={()=>setToggleCamera(prev => !prev)}>toggleCamera</Button>
+      {
+        user ? (
+          user?.role === 'ADMIN' ? <AdminLayout /> : <StudentLayout />
+        ) : <AuthLayout />
+      }
     </div>
   );
 }
