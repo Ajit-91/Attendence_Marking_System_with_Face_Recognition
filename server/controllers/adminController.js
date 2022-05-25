@@ -1,6 +1,6 @@
 const User = require('../models/User')
 const catchErrors = require('../utils/catchErrors')
-const { successResponse } = require('../utils/response')
+const { successResponse, errorResponse } = require('../utils/response')
 
 exports.registerStudent = catchErrors(async (req, res) => {
     const { name, enrollmentNo, password } = req.body

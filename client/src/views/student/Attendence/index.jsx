@@ -1,5 +1,6 @@
 import { Box } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { getFaceRecognitionInfo } from '../../../apis/studentApis'
 import Camera from '../../../components/Camera'
 import Dashboard from '../../../components/Dashboard'
 
@@ -9,7 +10,7 @@ const Attendence = () => {
     <>
         <Dashboard page='Home'>
             <Box>
-                {/* <Camera /> */}
+                <Camera />
             </Box>
         </Dashboard>
     </>
