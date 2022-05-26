@@ -51,7 +51,7 @@ function Dashboard(props) {
 
             <AppBar
                 position="fixed"
-                color='secondary'
+                color='white'
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
@@ -122,7 +122,8 @@ function Dashboard(props) {
             <Box
                 component="main"
                 style={{maxWidth : "100%"}}
-                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+                
+                sx={{ flexGrow: 1, p: 3, color : 'secondary', width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
                     {props.children}

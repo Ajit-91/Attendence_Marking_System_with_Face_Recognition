@@ -17,33 +17,31 @@ const loadLabeledImages = (labels) => {
     )
 }
 
-export const recognizeFaces = async (webcam, canvas, labels) => {
+export const recognizeFaces = async (image, canvas, labels) => {
 
     const labeledDescriptors = await loadLabeledImages(labels)
     console.log('labeledDescriptors', labeledDescriptors)
     const faceMatcher = new faceapi.FaceMatcher(labeledDescriptors, 0.7)
     
-    webcam.video.addEventListener('play', async () => {
         console.log('Playing')
-        canvas.innerHtml = faceapi.createCanvasFromMedia(webcam.video)
+        canvas.innerHtml = faceapi.createCanvasFromMedia(image)
 
-        const displaySize = { width: webcam.video.width, height: webcam.video.height }
+        const displaySize = { width : image.width, height: image.height }
         faceapi.matchDimensions(canvas, displaySize)
 
-        setInterval(async () => {
-            const detections = await faceapi.detectAllFaces(webcam.video).withFaceLandmarks().withFaceDescriptors()
+            const detections = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors()
             const resizedDetections = faceapi.resizeResults(detections, displaySize)
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
 
             const results = resizedDetections.map((d) => {
                 return faceMatcher.findBestMatch(d.descriptor)
             })
-            // console.log({results})
+
             results.forEach( (result, i) => {
                 const box = resizedDetections[i].detection.box
                 const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() })
                 drawBox.draw(canvas)
             })
-        }, 100)
-    })
+
+        return results
 }

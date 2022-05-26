@@ -7,7 +7,10 @@ const theme = createTheme({
             main : pink.A200
         },
         secondary : {
-            main : "#fff"
+            main : "#f2f2f2"
+        },
+        white : {
+            main : '#fff'
         }
     }
 })
