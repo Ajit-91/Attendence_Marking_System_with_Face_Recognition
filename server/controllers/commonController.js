@@ -2,8 +2,41 @@ const User = require('../models/User');
 const catchErrors = require('../utils/catchErrors');
 const { successResponse, errorResponse } = require('../utils/response');
 const sendToken = require('../utils/sendToken');
+const aws = require('aws-sdk');
+
 
 // ============Login User===============
+
+exports.fetchEnrollmentNo = catchErrors(async (req, res) => {
+    const totalStudents = await User.find({role : 'STUDENT'}).countDocuments()
+    if(totalStudents > 99) return res.status(501).json(errorResponse('max students limit reached'))
+
+    let prefix
+    if(totalStudents < 9){
+        prefix = `00${totalStudents + 1}`
+    }else{
+        prefix = `0${totalStudents + 1}`
+    }
+    let enrollmentNo = prefix + '1640322'
+    res.status(200).json(successResponse('success', {enrollmentNo}))
+})
+
+exports.registerUser = catchErrors(async (req, res) => {
+    const { name, enrollmentNo, password, images } = req.body
+    if (!name || !enrollmentNo || !password || !images) {
+        return res.status(400).json(errorResponse("one or more fields required"))
+    }
+
+    const foundUser = await User.findOne({ enrollmentNo })
+    if (foundUser) return res.status(400).json(errorResponse("enrollmentNo Already registered"))
+
+    const user = new User({
+        ...req.body
+    })
+
+    const savedUser = await user.save()
+    res.status(200).json(successResponse("success", savedUser))
+}) 
 
 exports.loginUser = catchErrors(async (req, res) => {
     const { enrollmentNo, password } = req.body;
@@ -23,4 +56,28 @@ exports.loginUser = catchErrors(async (req, res) => {
 
 exports.fetchUser = catchErrors(async (req, res) => {
     return res.status(200).json(successResponse("sucess", req.User))
+})
+
+
+// =========uploading images to s3==============
+
+exports.getSignedUrlForS3 = catchErrors(async (req, res) => {
+    const s3 = new aws.S3({
+        accessKeyId: process.env.S3_ACCESS_KEY_ID,
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+        region: process.env.S3_BUCKET_REGION
+    })
+
+    const { fileNames, folder } = req.body
+
+    const urls = fileNames.map((item) => {
+        return s3.getSignedUrl('putObject', {
+            Bucket: process.env.S3_BUCKET_NAME,
+            Key: folder + '/' + Date.now() + '-' + item,
+            Expires: 600,
+            ContentType: 'image/*',
+        });
+    })
+
+    return res.status(200).json(successResponse("success", urls))
 })

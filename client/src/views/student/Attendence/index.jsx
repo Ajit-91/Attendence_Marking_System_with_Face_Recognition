@@ -19,7 +19,7 @@ const Attendence = () => {
   return (
     <>
       <Dashboard page='Home'>
-        <Box sx={{ width: 480, height: 360 }}>
+        <Box sx={{ width: '100%', height: 'auto' }}>
           {turnVideo && <Camera labels={labels} />}
         </Box>
         <Button

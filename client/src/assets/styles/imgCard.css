@@ -1,0 +1,19 @@
+.imgCard{
+    width: 100%;
+    object-fit: contain;
+    position: relative;
+}
+.imgCard img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    border: 2px solid #9c27b0;
+}
+.cross{
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: white;
+}
