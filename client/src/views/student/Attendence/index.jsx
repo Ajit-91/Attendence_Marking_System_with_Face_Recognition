@@ -1,34 +1,29 @@
-import { Box, Button } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { getFaceRecognitionInfo } from '../../../apis/studentApis'
-import Camera from '../../../components/Camera'
+import React, { useState } from 'react'
 import Dashboard from '../../../components/Dashboard'
+import Step1 from './components/Step1'
+import Step2 from './components/Step2'
 
 const Attendence = () => {
-  const [labels, setLabels] = useState([])
-  const [turnVideo, setTurnVideo] = useState(false)
-  useEffect(() => {
-    const fetchLabels = async () => {
-      const resp = await getFaceRecognitionInfo()
-      if (resp?.error === false) {
-        setLabels(resp?.data)
-      }
+  const [stepCount, setStepCount] = useState(1)
+  const [code, setCode] = useState('')
+
+  const getComponent = () => {
+    switch (stepCount) {
+      case 1:
+        return <Step1 setStepCount={setStepCount} setCode={setCode} />
+
+      case 2:
+        return <Step2 setStepCount={setStepCount} code={code} />
+
+      default:
+        break;
     }
-    fetchLabels()
-  }, [])
+  }
+
   return (
     <>
-      <Dashboard page='Home'>
-        <Box sx={{ width: '100%', height: 'auto' }}>
-          {turnVideo && <Camera labels={labels} />}
-        </Box>
-        <Button
-          color='primary'
-          variant='contained'
-          sx={{mx : 'auto', mt : 3, display : 'block'}}
-          onClick={() => setTurnVideo(prev => !prev)}
-        >{turnVideo ? 'Turn off Camera' : 'Turn On Camera'}
-        </Button>
+      <Dashboard page='Attendence'>
+        {getComponent()}
       </Dashboard>
     </>
   )

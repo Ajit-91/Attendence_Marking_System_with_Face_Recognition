@@ -5,8 +5,11 @@ import "../../assets/styles/webcam.css"
 import { Box, Button, Grid } from '@mui/material';
 import Loading from '../../components/Loading'
 import { recognizeFaces } from '../../utils/faceRecognition';
+import {useSelector} from 'react-redux'
+import {selectUser} from '../../redux/slices/userSlice'
+import { markAttendence } from '../../apis/studentApis';
 
-const Camera = ({ labels }) => {
+const Camera = ({ labels, code }) => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     // const videoWidth = 480
@@ -16,6 +19,7 @@ const Camera = ({ labels }) => {
     const [loadForRecognition, setLoadForRecognition] = useState(false)
     const [imgSrc, setImgSrc] = useState(null);
     const imageRef = useRef(null)
+    const user = useSelector(selectUser)
 
     const capture = useCallback(() => {
         const imageSrc = videoRef.current.getScreenshot();
@@ -57,9 +61,14 @@ const Camera = ({ labels }) => {
                     const res = await recognizeFaces(imageRef.current, canvasRef.current, labels)
                     console.log({ recogRes: res })
     
-                    const found  =  res.find((match) => match.label === 'Admin')
+                    const found  =  res.find((match) => match.label === user?.name)
                     if(found){
-                        alert('Your attendence is marked')
+                        const res = await markAttendence({attCode : code})
+                        if(res?.error === false){
+                            alert('Your attendence is marked')
+                        }
+                    }else{
+                        alert('Please Try Again')
                     }
                     setLoadForRecognition(false)
                 }

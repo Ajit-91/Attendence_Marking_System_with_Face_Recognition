@@ -20,6 +20,8 @@ const Login = () => {
         })
         if(res?.error === false){
             dispatch(SET_USER(res?.data))
+        }else{
+            alert(res?.message || 'something went wrong')
         }
         setLoading(false)
     }

@@ -3,6 +3,7 @@ const catchErrors = require('../utils/catchErrors')
 const { successResponse, errorResponse } = require('../utils/response')
 const AttendenceCode = require('../models/AttendenceCode');
 const { getCode } = require('../utils/AttendenceUtils');
+const Attendence = require('../models/Attendence');
 
 
 exports.registerStudent = catchErrors(async (req, res) => {
@@ -35,4 +36,17 @@ exports.generateAttCode = catchErrors (async (req, res) => {
 
     const savedAttCode = await attCode.save()
     res.status(200).json(successResponse('success', savedAttCode))
+})
+
+exports.getAllAttCodes = catchErrors(async (req, res) => {
+    const attCodes = await AttendenceCode.find().sort({createdAt : 'desc'})
+    res.status(200).json(successResponse('success', attCodes))
+})
+
+exports.getAttndenceHistory = catchErrors(async (req, res) => {
+    const attHistory = await Attendence.find()
+        .populate('attCode')
+        .populate('student')
+    
+    res.status(200).json(successResponse('success', attHistory))
 })

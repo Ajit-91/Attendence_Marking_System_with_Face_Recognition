@@ -9,13 +9,14 @@ const isAuthenticated = async (req, res, next) =>{
             token = req.headers.authorization.split(' ')[1]
         }
 
+        console.log({token})
         if(!token || token === 'undefined') return res.status(401).json(errorResponse("Please login "))
 
-        console.log({token : typeof(token)})
         const decodedData =  jwt.verify(token, process.env.JWT_SECRET)
         const resp = await User.findById(decodedData._id)
+        
         if(resp){
-            req.User = resp;
+            req.user = resp;
             next()
         }else{
             return res.status(401).json(errorResponse("Please login "))

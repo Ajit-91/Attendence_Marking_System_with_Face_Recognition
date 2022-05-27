@@ -36,10 +36,7 @@ function Dashboard(props) {
     const container = window !== undefined ? () => window().document.body : undefined;
 
     const handleLogout = () => {
-        console.log("called")
-        if(window.confirm("Are you sure ?")){
-            dispatch(LOGOUT())
-        }
+        dispatch(LOGOUT())
     }
 
     return (
@@ -75,7 +72,7 @@ function Dashboard(props) {
                         <IconButton
                         color="inherit"
                         edge="start"
-                        onClick={handleLogout}
+                        onClick={()=>dispatch(LOGOUT())}
                     >
                         <LogoutIcon />
                     </IconButton>

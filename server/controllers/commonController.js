@@ -57,7 +57,7 @@ exports.loginUser = catchErrors(async (req, res) => {
 // ============fetch User===============
 
 exports.fetchUser = catchErrors(async (req, res) => {
-    return res.status(200).json(successResponse("sucess", req.User))
+    return res.status(200).json(successResponse("sucess", {user : req.user}))
 })
 
 

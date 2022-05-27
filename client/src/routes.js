@@ -13,13 +13,23 @@ const studentRoutes = [
         name: "Attendence",
         icon: CloudUploadIcon
     },
+    {
+        path: "/my-attendence",
+        name: "My Attendence",
+        icon: CloudUploadIcon
+    },
 ]
 
 const adminRoutes = [
     {
-        path: "/admin-panel",
-        name: "Admin Panel",
+        path: "/attendence-code",
+        name: "Attendence Code",
         icon: AdminPanelSettingsIcon
-    }
+    },
+    {
+        path: "/attendence-history",
+        name: "All Attendences",
+        icon: AdminPanelSettingsIcon
+    },
 ]
 export {studentRoutes, adminRoutes}

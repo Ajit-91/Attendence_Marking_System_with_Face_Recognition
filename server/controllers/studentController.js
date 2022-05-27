@@ -6,38 +6,44 @@ const { isCodeValid, isAttendenceMarked, getDateString } = require("../utils/Att
 
 
 exports.getFaceRecognitionLabels = catchErrors(async (req, res) => {
-    const info = await User.find({role : {$ne : 'ADMIN'}}).select('name images')
+    const info = await User.find({ role: { $ne: 'ADMIN' } }).select('name images')
     console.log(info)
     res.status(200).json(successResponse('success', info))
 })
 
 exports.validateAtFirstStep = catchErrors(async (req, res) => {
-    const {attCode} = req.body
+    const { attCode } = req.body
     const validCode = await isCodeValid(attCode)
-    if(!validCode) return res.status(400).json(errorResponse('Attendence Code is invalid or is Expired'))
+    if (!validCode) return res.status(400).json(errorResponse('Attendence Code is invalid or is Expired'))
     const markedAlready = await isAttendenceMarked(req.user._id)
-    if(markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))
+    if (markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))
 
     res.status(200).json(successResponse('success'))
 })
 
 exports.markAttendence = catchErrors(async (req, res) => {
-    const {attCode} = req.body
+    const { attCode } = req.body
     const validCode = await isCodeValid(attCode)
-    if(!validCode) return res.status(400).json(errorResponse('Attendence Code is invalid or is Expired'))
+    if (!validCode) return res.status(400).json(errorResponse('Attendence Code is invalid or is Expired'))
     const markedAlready = await isAttendenceMarked(req.user._id)
-    if(markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))
+    if (markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))
 
     const dateString = getDateString()
 
-        const att = new Attendence({
-            attCode,
-            student : req.user._id,
-            dateString,
-            status : 'present'
-        })
+    const att = new Attendence({
+        attCode,
+        student: req.user._id,
+        dateString,
+        status: 'present'
+    })
 
-        const savedAtt = await att.save()
-        res.status(200).json(successResponse("success", savedAtt))
+    const savedAtt = await att.save()
+    res.status(200).json(successResponse("success", savedAtt))
+})
+
+exports.getMyAttendence = catchErrors(async (req, res) => {
+    const attHistory = await Attendence.find({ student: req.user._id })
+        .populate('attCode')
+    res.status(200).json(successResponse('success', attHistory))
 })
 

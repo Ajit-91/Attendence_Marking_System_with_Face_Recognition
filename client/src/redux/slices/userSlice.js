@@ -9,8 +9,11 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         SET_USER : (state, {payload})=>{
-            state.user = payload
-            localStorage.setItem('token', payload?.token)
+            console.log({payload})
+            state.user = payload?.user
+            if(payload?.token){
+                localStorage.setItem('token', payload?.token)
+            }
         },
         LOGOUT : (state)=>{
             state.user = null

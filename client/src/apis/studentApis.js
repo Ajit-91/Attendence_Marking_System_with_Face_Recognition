@@ -5,10 +5,47 @@ export const getFaceRecognitionInfo = async () => {
     const options = {
         method: "GET",
         headers: { 
-            // authorization : `token ${localStorage.getItem('token')}`
-            authorization : `token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhiZDVhOGFlMzQxZDVjOWNmNTg5N2MiLCJpYXQiOjE2NTM0NjU0NDUsImV4cCI6MzMwNzUzNTY5MH0.wABvjrodrC1MLCzANsCDGNpMtpdv_AwQcO_FokDjlbs`
+            authorization : `token ${localStorage.getItem('token')}`
          },
     }
 
     return await fetchApi(route, options)
 }
+
+export const validateInStep1 = async (body) => {
+    const route =  '/api/student/validate-at-first-step'
+    const options = {
+        method: "POST",
+        headers: { 
+            "Content-Type" : "application/json",
+            authorization : `token ${localStorage.getItem('token')}`
+         },
+        body : JSON.stringify(body)
+    }
+    return await fetchApi(route, options)
+}
+
+export const markAttendence = async (body) => {
+    const route =  '/api/student/mark-attendence'
+    const options = {
+        method: "POST",
+        headers: { 
+            "Content-Type" : "application/json",
+            authorization : `token ${localStorage.getItem('token')}`
+         },
+        body : JSON.stringify(body)
+    }
+    return await fetchApi(route, options)
+}
+
+export const getMyAttendence = async () => {
+    const route = '/api/student/get-my-attendence'
+    const options = {
+        method: "GET",
+        headers: { 
+            authorization : `token ${localStorage.getItem('token')}`
+         },
+    }
+    return await fetchApi(route, options)
+}
+
