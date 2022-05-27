@@ -1,4 +1,4 @@
-import { Box, Button, Container, Stack, TextField } from '@mui/material'
+import { Button, Container, Stack, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { login } from '../../../apis/commonApis'
@@ -24,6 +24,7 @@ const Login = () => {
         setLoading(false)
     }
 
+
   return (
     <Container>
         {loading && <Loading />}
@@ -38,7 +39,8 @@ const Login = () => {
                 onChange={(e)=>setEnrollmentNo(e.target.value)}
             />
             <TextField
-                label='Enrollment No'
+                label='Password'
+                type='password'
                 fullWidth
                 required
                 margin='normal'

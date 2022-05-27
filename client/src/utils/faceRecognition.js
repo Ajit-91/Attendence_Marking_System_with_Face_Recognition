@@ -6,7 +6,7 @@ const loadLabeledImages = (labels) => {
     return Promise.all(
         labels.map(async (label)=>{
             const descriptions = []
-                for(let i = 0; i < 3; i++){
+                for(let i = 0; i < 2; i++){
                     
                     const img = await faceapi.fetchImage(label?.images[i]) // put img url here
                     const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()

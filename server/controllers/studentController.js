@@ -2,6 +2,7 @@ const Attendence = require("../models/Attendence");
 const catchErrors = require("../utils/catchErrors");
 const User = require('../models/User')
 const { successResponse, errorResponse } = require("../utils/response");
+const { isCodeValid, isAttendenceMarked, getDateString } = require("../utils/AttendenceUtils");
 
 
 exports.getFaceRecognitionLabels = catchErrors(async (req, res) => {
@@ -10,13 +11,33 @@ exports.getFaceRecognitionLabels = catchErrors(async (req, res) => {
     res.status(200).json(successResponse('success', info))
 })
 
-exports.markAttendence = catchErrors(async (req, res) => {
-    
-    const foundAtt = await Attendence.findOne({student : req.User._id})
-    if(!foundAtt){
-        return res.status(400).json(errorResponse('Attendence not found'))
-    }
-    foundAtt.status = 'present'
-    const savedAtt = await foundAtt.save()
-    res.status(200).json(successResponse("success", savedAtt))
+exports.validateAtFirstStep = catchErrors(async (req, res) => {
+    const {attCode} = req.body
+    const validCode = await isCodeValid(attCode)
+    if(!validCode) return res.status(400).json(errorResponse('Attendence Code is invalid or is Expired'))
+    const markedAlready = await isAttendenceMarked(req.user._id)
+    if(markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))
+
+    res.status(200).json(successResponse('success'))
 })
+
+exports.markAttendence = catchErrors(async (req, res) => {
+    const {attCode} = req.body
+    const validCode = await isCodeValid(attCode)
+    if(!validCode) return res.status(400).json(errorResponse('Attendence Code is invalid or is Expired'))
+    const markedAlready = await isAttendenceMarked(req.user._id)
+    if(markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))
+
+    const dateString = getDateString()
+
+        const att = new Attendence({
+            attCode,
+            student : req.user._id,
+            dateString,
+            status : 'present'
+        })
+
+        const savedAtt = await att.save()
+        res.status(200).json(successResponse("success", savedAtt))
+})
+

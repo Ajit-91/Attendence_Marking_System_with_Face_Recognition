@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const attendenceSchema = new mongoose.Schema({
+    attCode : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'AttendenceCode'
+    },
     student : {
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User'
