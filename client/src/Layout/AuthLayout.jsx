@@ -1,14 +1,15 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router'
 import Register from '../views/auth/Register'
+import Login from '../views/auth/Login'
 
 const AuthLayout = () => {
   return (
     <div>
         <Routes>
-            <Route path='/login' element={<div>Login</div>} />
+            <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
-            <Route path='*' element={<Navigate to="/register" />} />
+            <Route path='*' element={<Navigate to="/login" />} />
         </Routes>
     </div>
   )

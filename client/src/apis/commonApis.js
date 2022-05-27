@@ -9,15 +9,36 @@ export const getEnrollmentNo = async () => {
 }
 
 export const register = async (body) => {
-    const route =  '/api/get-enrollment-no'
+    const route =  '/api/register'
     const options = {
         method: "POST",
         headers: { 
-            // authorization : `token ${localStorage.getItem('token')}`
             "Content-Type" : "application/json",
-            authorization : `token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhiZDVhOGFlMzQxZDVjOWNmNTg5N2MiLCJpYXQiOjE2NTM0NjU0NDUsImV4cCI6MzMwNzUzNTY5MH0.wABvjrodrC1MLCzANsCDGNpMtpdv_AwQcO_FokDjlbs`
          },
         body : JSON.stringify(body)
+    }
+    return await fetchApi(route, options)
+}
+
+export const login = async (body) => {
+    const route =  '/api/login'
+    const options = {
+        method: "POST",
+        headers: { 
+            "Content-Type" : "application/json",
+         },
+        body : JSON.stringify(body)
+    }
+    return await fetchApi(route, options)
+}
+
+export const fetchUser = async () => {
+    const route =  '/api/fetch-user'
+    const options = {
+        method: "GET",
+        headers : {
+            authorization : `token ${localStorage.getItem('token')}`
+        }
     }
     return await fetchApi(route, options)
 }
@@ -40,7 +61,7 @@ export const getUrls = async(body) => {
 export const sendToS3 = async (file, route) => {
     const options = {
         method : "PUT",
-        headers : {"Content-Type" : "multipart/form-data"},
+        headers : {"Content-Type" : "image/jpeg"},
         body : file
     }
     try {

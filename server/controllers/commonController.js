@@ -35,7 +35,9 @@ exports.registerUser = catchErrors(async (req, res) => {
     })
 
     const savedUser = await user.save()
-    res.status(200).json(successResponse("success", savedUser))
+    if(savedUser){
+        sendToken(savedUser, res)
+    }
 }) 
 
 exports.loginUser = catchErrors(async (req, res) => {

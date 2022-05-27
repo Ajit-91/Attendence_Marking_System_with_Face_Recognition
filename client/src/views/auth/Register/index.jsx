@@ -1,11 +1,14 @@
 import { Button, Grid, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import {useDispatch} from 'react-redux'
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import Webcam from 'react-webcam'
 import ImgCard from '../../../components/ImageCard'
-import { getEnrollmentNo } from '../../../apis/commonApis';
-import {uploadFiles} from '../../../utils/uploadFiles'
+import { getEnrollmentNo, register } from '../../../apis/commonApis';
+import {uploadFiles, urltoFile} from '../../../utils/uploadFiles'
+import Loading from '../../../components/Loading';
+import { SET_USER } from '../../../redux/slices/userSlice';
 
 const Register = () => {
     const [images, setImages] = useState([])
@@ -15,7 +18,8 @@ const Register = () => {
     const [password, setPassword] = useState('')
     const [enrollmentNo, setEnrollmentNo] = useState('')
     const [previewImages, setPreviewImages] = useState([])
-
+    const [loading, setLoading] = useState(false)
+    const dispatch = useDispatch()
     useEffect(() => {
         const fetchEnrollmentNo = async () => {
             const res = await getEnrollmentNo()
@@ -32,7 +36,22 @@ const Register = () => {
         //  converting uri to file so that we can upload on s3
         let file = await fetch(imageSrc)
             .then(r => r.blob())
-            .then(blobFile => new File([blobFile], `image-${Date.now()}`, { type: "image/png" }))
+            .then(blobFile => {
+                return new File([blobFile], `image-${Date.now()}.jpeg`, { type: "image/jpeg" })
+            })
+
+            console.log({file})
+
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file)
+            fileReader.onload = ()=>{
+                // setPreviewImage(fileReader.result)
+                console.log('reading file', fileReader.result)
+
+            }
+            fileReader.onerror = (err)=>{
+              console.log('file reader error',err)
+            }
 
         setPreviewImages(prev => [...prev, imageSrc]);
         setImages(prev => [...prev, file])
@@ -46,6 +65,7 @@ const Register = () => {
     }
 
     const handleSubmit = async () => {
+        setLoading(true)
         let body = {
             name, enrollmentNo, password
         }
@@ -53,11 +73,16 @@ const Register = () => {
         console.log({uploadedImages})
         body = {...body, images : uploadedImages}
 
-        console.log({body})
+        const resp = await register(body)
+        if(resp?.error === false){
+            dispatch(SET_USER(resp?.data))
+        }
+        setLoading(false)        
     }
 
     return (
         <Box px={5}>
+            {loading && <Loading />}
             {turnVideo ? (
                 <Webcam
                     style={{ width: '70%', height: '360px', margin: '5px auto', display: 'block' }}

@@ -51,17 +51,24 @@ const Camera = ({ labels }) => {
     useEffect(() => {
         console.log({ imageRef })
         const fun = async () => {
-            if (imgSrc && imageRef) {
-                setLoadForRecognition(true)
-                const res = await recognizeFaces(imageRef.current, canvasRef.current, labels)
-                console.log({ recogRes: res })
-
-                const found  =  res.find((match) => match.label === 'Admin')
-                if(found){
+            try {
+                if (imgSrc && imageRef) {
+                    setLoadForRecognition(true)
+                    const res = await recognizeFaces(imageRef.current, canvasRef.current, labels)
+                    console.log({ recogRes: res })
+    
+                    const found  =  res.find((match) => match.label === 'Admin')
+                    if(found){
+                        alert('Your attendence is marked')
+                    }
                     setLoadForRecognition(false)
-                    alert('Your attendence is marked')
                 }
+            } catch (error) {
+                setLoadForRecognition(false)
+                alert('something went wrong')
+                console.log('Face recognition error', error)
             }
+        
         }
         fun()
     }, [imgSrc])
