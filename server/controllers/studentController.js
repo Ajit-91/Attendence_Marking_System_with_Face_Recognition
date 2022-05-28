@@ -44,6 +44,8 @@ exports.markAttendence = catchErrors(async (req, res) => {
 exports.getMyAttendence = catchErrors(async (req, res) => {
     const attHistory = await Attendence.find({ student: req.user._id })
         .populate('attCode')
+        .populate('student')
+
     res.status(200).json(successResponse('success', attHistory))
 })
 

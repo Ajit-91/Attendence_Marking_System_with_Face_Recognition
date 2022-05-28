@@ -22,7 +22,7 @@ const Attendence = () => {
 
   return (
     <>
-      <Dashboard page='Attendence'>
+      <Dashboard page='Mark Attendence'>
         {getComponent()}
       </Dashboard>
     </>

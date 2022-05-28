@@ -10,7 +10,7 @@ const studentRoutes = [
     },
     {
         path: "/attendence",
-        name: "Attendence",
+        name: "Mark Attendence",
         icon: CloudUploadIcon
     },
     {

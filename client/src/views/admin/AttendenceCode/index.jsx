@@ -1,7 +1,7 @@
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { getAllAttCodes } from '../../../apis/adminApis'
-import DataTable from '../../../components/DataTable'
+import DataTable from '../../../components/AttendenceTable'
 import Loading from '../../../components/Loading'
 import GenerateCode from './components/GenerateCode'
 
