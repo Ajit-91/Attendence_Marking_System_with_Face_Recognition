@@ -20,6 +20,7 @@ const Register = () => {
     const [previewImages, setPreviewImages] = useState([])
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
+    
     useEffect(() => {
         const fetchEnrollmentNo = async () => {
             const res = await getEnrollmentNo()
