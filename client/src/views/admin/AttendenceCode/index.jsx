@@ -1,7 +1,6 @@
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { getAllAttCodes } from '../../../apis/adminApis'
-import DataTable from '../../../components/AttendenceTable'
 import Loading from '../../../components/Loading'
 import GenerateCode from './components/GenerateCode'
 
@@ -31,10 +30,10 @@ const AttendenceCode = () => {
                         <Table sx={{ minWidth: '80%' }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    {/* <TableCell></TableCell> */}
-                                    <TableCell align="right">Subject</TableCell>
-                                    <TableCell align="right">Code</TableCell>
-                                    <TableCell align="right">Status</TableCell>
+                                    <TableCell >Subject</TableCell>
+                                    <TableCell >Code</TableCell>
+                                    <TableCell >Created At</TableCell>
+                                    <TableCell >Status</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -43,14 +42,14 @@ const AttendenceCode = () => {
                                         key={row.name}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
-                                        {/* <TableCell component="th" scope="row">
-                                            {row?.subject}
-                                        </TableCell> */}
-                                        <TableCell align="right">{row?.subject}</TableCell>
-                                        <TableCell align="right">{row?.code}</TableCell>
-                                        <TableCell align="right">{row?.expiresAt > Date.now() ? 'Active' : 'Expired'}</TableCell>
-                                        {/* <TableCell align="right">{row.carbs}</TableCell>
-                                        <TableCell align="right">{row.protein}</TableCell> */}
+                                        <TableCell >{row?.subject}</TableCell>
+                                        <TableCell >{row?.code}</TableCell>
+                                        <TableCell >{row?.createdAt}</TableCell>
+                                        <TableCell >{row?.expiresAt > Date.now() ? (
+                                            <Typography color='success'>Active</Typography>
+                                        ) : (
+                                            <Typography color='error'>Expired</Typography>
+                                        )}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

@@ -19,23 +19,25 @@ const App = () => {
       const res = await fetchUser()
       if (res?.error === false) {
         dispatch(SET_USER(res?.data))
+        Promise.all([
+          faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URI),
+          faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URI),
+          faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_URI),
+        ]).then(() => {
+          console.log('models loaded')
+          setLoading(false)
+        }).catch(err => {
+          console.log('models loading error', err)
+        })
       }
-      Promise.all([
-        faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URI),
-        faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URI),
-        faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_URI),
-    ]).then(() => {
-        console.log('models loaded')
-        setLoading(false)
-    }).catch(err => {
-        console.log('models loading error', err)
-    })
+      setLoading(false)
+
     }
     getUserAndLoadModels()
   }, [])
 
   const user = useSelector(selectUser)
-  console.log({user})
+  console.log({ user })
   return (
     <>
       {loading ? <Loading backdrop={false} /> : (

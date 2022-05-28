@@ -20,7 +20,6 @@ function Dashboard(props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [routes, setRoutes] = React.useState([])
-    const [show, setShow] = React.useState(false)
     const dispatch = useDispatch()
     const user = useSelector(selectUser)
 
@@ -35,16 +34,8 @@ function Dashboard(props) {
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
-    const handleLogout = () => {
-        dispatch(LOGOUT())
-    }
-
     return (
-        <Box sx={{ display: 'flex' }}
-            // bgcolor='primary.main'
-
-        >
-            {/* {show && <ProfileSnap setShow={setShow} />} */}
+        <Box sx={{ display: 'flex' }}>
             <CssBaseline />
 
             {/* Following  is Header */}
