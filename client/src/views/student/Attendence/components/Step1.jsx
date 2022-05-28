@@ -1,4 +1,4 @@
-import { TextField, Button, Container } from '@mui/material'
+import { TextField, Button, Container, Paper, Box, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import {validateInStep1} from '../../../../apis/studentApis'
 
@@ -23,17 +23,23 @@ const Step1 = ({setStepCount, setCode}) => {
 
   return (
     <>
-        <Container maxWidth='sm'>
+        <Container maxWidth='md'>
+        <Paper component={Box} elevation={5} p={4} mt={4} >
+            <Typography fontWeignt='bold' variant='body1' sx={{mb : 3}} >Enter the Attendence code provided by your teacher</Typography>
             <form onSubmit={handleSubmit}>
                 <TextField
                     label='Attendence code'
+                    required
                     fullWidth
                     value={attCode}
                     onChange={(e)=>setAttCode(e.target.value)}
                     placeholder='Enter 8 digit attendence code'
                 />
-                <Button sx={{my : 5}} variant='contained' type='submit'>Submit</Button>
+                <Button sx={{mt : 4}} variant='contained' type='submit'>
+                    Next
+                </Button>
             </form>
+        </Paper>
         </Container>
     </>
   )

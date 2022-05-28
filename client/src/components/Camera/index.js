@@ -5,8 +5,8 @@ import "../../assets/styles/webcam.css"
 import { Box, Button, Grid } from '@mui/material';
 import Loading from '../../components/Loading'
 import { recognizeFaces } from '../../utils/faceRecognition';
-import {useSelector} from 'react-redux'
-import {selectUser} from '../../redux/slices/userSlice'
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../redux/slices/userSlice'
 import { markAttendence } from '../../apis/studentApis';
 
 const Camera = ({ labels, code }) => {
@@ -60,14 +60,14 @@ const Camera = ({ labels, code }) => {
                     setLoadForRecognition(true)
                     const res = await recognizeFaces(imageRef.current, canvasRef.current, labels)
                     console.log({ recogRes: res })
-    
-                    const found  =  res.find((match) => match.label === user?.name)
-                    if(found){
-                        const res = await markAttendence({attCode : code})
-                        if(res?.error === false){
+
+                    const found = res.find((match) => match.label === user?.name)
+                    if (found) {
+                        const res = await markAttendence({ attCode: code })
+                        if (res?.error === false) {
                             alert('Your attendence is marked')
                         }
-                    }else{
+                    } else {
                         alert('Please Try Again')
                     }
                     setLoadForRecognition(false)
@@ -77,50 +77,57 @@ const Camera = ({ labels, code }) => {
                 alert('something went wrong')
                 console.log('Face recognition error', error)
             }
-        
+
         }
         fun()
     }, [imgSrc])
 
     return (
         <>
-            {loading ? <Loading  /> : (
+            {loading ? <Loading /> : (
                 <Box width='100%'>
                     {loadForRecognition && <Loading />}
                     <Grid container spacing={2}>
                         <Grid item xs={12} lg={6} md={6}>
                             <Webcam
-                                style={{ zIndex: 2, position: 'relative', width: '100%', height: '100%' }}
+                                style={{ zIndex: 2, position: 'relative', width: '100%', height: '100%', }}
                                 ref={videoRef}
                                 muted
                                 screenshotFormat="image/jpeg"
                                 autoPlay
                             />
+                            <Button
+                                sx={{ mx: 'auto', mt: 4, display: 'block' }}
+                                variant='outlined'
+                                onClick={capture}
+                            >Capture
+                            </Button>
                         </Grid>
                         <Grid item xs={12} lg={6} md={6}>
                             {imgSrc && (
-                                <div style={{ position: 'relative', width: '100%', height: '100%', zIndex: 1 }}>
-                                    <img
-                                        src={imgSrc}
-                                        alt='user'
-                                        ref={imageRef}
-                                    />
-                                    <canvas
-                                        ref={canvasRef}
-                                        style={{ position: 'absolute', left: 0, top: 0, zIndex: 3 }}
-                                    >
-                                    </canvas>
-                                </div>
+                                <>
+                                    <div style={{ position: 'relative', width: '100%', height: '100%', zIndex: 1 }}>
+                                        <img
+                                            src={imgSrc}
+                                            alt='user'
+                                            ref={imageRef}
+                                        />
+                                        <canvas
+                                            ref={canvasRef}
+                                            style={{ position: 'absolute', left: 0, top: 0, zIndex: 3 }}
+                                        >
+                                        </canvas>
+                                    </div>
+                                    <Button
+                                        sx={{ mx: 'auto', mt: 4, display: 'block' }}
+                                        variant='outlined'
+                                        onClick={capture}
+                                    >Capture
+                                    </Button>
+                                </>
                             )}
                         </Grid>
                     </Grid>
-                    <Button
-                        sx={{ mx: 'auto', mt: 5, display: 'block' }}
-                        variant='outlined'
-                        color='info'
-                        onClick={capture}
-                    >Capture
-                    </Button>
                 </Box>
             )}
         </>

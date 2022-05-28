@@ -7,26 +7,26 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Avatar } from '@mui/material';
 import Sidebar from '../Sidebar';
 import { studentRoutes, adminRoutes } from '../../routes';
-import {  useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { LOGOUT, selectUser } from '../../redux/slices/userSlice';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 const drawerWidth = (window.innerWidth > 600 && window.innerWidth < 750) ? 210 : 240;
 
 function Dashboard(props) {
+
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [routes, setRoutes] = React.useState([])
     const [show, setShow] = React.useState(false)
     const dispatch = useDispatch()
     const user = useSelector(selectUser)
-    
-    React.useEffect(()=>{
-        setRoutes(user?.role === "ADMIN" ? adminRoutes : studentRoutes )
-      }, [user])
+
+    React.useEffect(() => {
+        setRoutes(user?.role === "ADMIN" ? adminRoutes : studentRoutes)
+    }, [user])
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -40,15 +40,18 @@ function Dashboard(props) {
     }
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex' }}
+            // bgcolor='primary.main'
+
+        >
             {/* {show && <ProfileSnap setShow={setShow} />} */}
             <CssBaseline />
 
-                {/* Following  is Header */}
+            {/* Following  is Header */}
 
             <AppBar
                 position="fixed"
-                color='white'
+                color='primary'
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
@@ -80,7 +83,7 @@ function Dashboard(props) {
                 </Toolbar>
             </AppBar>
 
-                {/* Following  is SideNavbar */}
+            {/* Following  is SideNavbar */}
 
             <Box
                 component="nav"
@@ -114,13 +117,18 @@ function Dashboard(props) {
                 </Drawer>
             </Box>
 
-                {/* Following  is Main content */}
+            {/* Following  is Main content */}
 
             <Box
                 component="main"
-                style={{maxWidth : "100%"}}
-                
-                sx={{ flexGrow: 1, p: 3, color : 'secondary', width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+                sx={{ 
+                        flexGrow: 1, 
+                        p: 3, 
+                        width: { sm: `calc(100% - ${drawerWidth}px)`, 
+                        backgroundColor : '#eeeeee',
+                        maxWidth : "100%", 
+                        minHeight : '100vh' } 
+                    }}
             >
                 <Toolbar />
                     {props.children}

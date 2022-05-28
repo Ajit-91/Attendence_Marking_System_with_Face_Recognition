@@ -4,7 +4,7 @@ import Step1 from './components/Step1'
 import Step2 from './components/Step2'
 
 const Attendence = () => {
-  const [stepCount, setStepCount] = useState(1)
+  const [stepCount, setStepCount] = useState(2)
   const [code, setCode] = useState('')
 
   const getComponent = () => {
