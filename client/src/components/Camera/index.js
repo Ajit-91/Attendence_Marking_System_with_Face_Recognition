@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Webcam from "react-webcam";
-import * as faceapi from 'face-api.js'
 import "../../assets/styles/webcam.css"
 import { Box, Button, Grid } from '@mui/material';
 import Loading from '../../components/Loading'
@@ -12,10 +11,6 @@ import { markAttendence } from '../../apis/studentApis';
 const Camera = ({ labels, code }) => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
-    // const videoWidth = 480
-    // const videoHeight = 360
-    const MODELS_URI = '/models'
-    const [loading, setLoading] = useState(true)
     const [loadForRecognition, setLoadForRecognition] = useState(false)
     const [imgSrc, setImgSrc] = useState(null);
     const imageRef = useRef(null)
@@ -28,9 +23,9 @@ const Camera = ({ labels, code }) => {
 
     const stopVideo = useCallback(() => {
         if (videoRef.current) {
-            let stream = videoRef.current.stream;
-            const tracks = stream.getTracks();
-            tracks.forEach(track => track.stop());
+            let stream = videoRef?.current?.stream;
+            const tracks = stream?.getTracks();
+            tracks?.forEach(track => track?.stop());
         }
     }, [videoRef])
 
@@ -46,6 +41,8 @@ const Camera = ({ labels, code }) => {
                     const res = await markAttendence({ attCode: code })
                     if (res?.error === false) {
                         alert('Your attendence is marked')
+                    }else{
+                        alert(res?.message)
                     }
                 } else {
                     alert('Please Try Again')
@@ -60,20 +57,6 @@ const Camera = ({ labels, code }) => {
     }
 
     useEffect(() => {
-        console.log('video starting')
-        Promise.all([
-            faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URI),
-            faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URI),
-            faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_URI),
-        ]).then(() => {
-            console.log('models loaded')
-            setLoading(false)
-        }).catch(err => {
-            console.log('models loading error', err)
-        })
-    }, [])
-
-    useEffect(() => {
         return () => {
             stopVideo()
         }
@@ -81,7 +64,6 @@ const Camera = ({ labels, code }) => {
 
     return (
         <>
-            {loading ? <Loading /> : (
                 <Box width='100%' mt={4}>
                     {loadForRecognition && <Loading />}
                     <Grid container spacing={2} >
@@ -102,7 +84,6 @@ const Camera = ({ labels, code }) => {
                         </Grid>
                         <Grid item xs={12} lg={6} md={6}>
                             {imgSrc && (
-                                // <>
                                 <div style={{ position: 'relative', width: '100%', height: '100%', zIndex: 1 }}>
                                     <img
                                         src={imgSrc}
@@ -122,12 +103,10 @@ const Camera = ({ labels, code }) => {
                                     >Mark Attendence
                                     </Button>
                                 </div>
-                                // </>
                             )}
                         </Grid>
                     </Grid>
                 </Box>
-            )}
         </>
     )
 }

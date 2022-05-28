@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, SET_USER } from "./redux/slices/userSlice";
-
+import * as faceapi from 'face-api.js'
 import AdminLayout from "./Layout/AdminLayout";
 import StudentLayout from "./Layout/StudentLayout";
 import AuthLayout from "./Layout/AuthLayout";
@@ -12,17 +12,26 @@ import Loading from "./components/Loading";
 const App = () => {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(true)
+  const MODELS_URI = '/models'
 
   useEffect(() => {
-    const getUser = async () => {
+    const getUserAndLoadModels = async () => {
       const res = await fetchUser()
-      console.log({resApp : res})
       if (res?.error === false) {
         dispatch(SET_USER(res?.data))
       }
-      setLoading(false)
+      Promise.all([
+        faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URI),
+        faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URI),
+        faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_URI),
+    ]).then(() => {
+        console.log('models loaded')
+        setLoading(false)
+    }).catch(err => {
+        console.log('models loading error', err)
+    })
     }
-    getUser()
+    getUserAndLoadModels()
   }, [])
 
   const user = useSelector(selectUser)

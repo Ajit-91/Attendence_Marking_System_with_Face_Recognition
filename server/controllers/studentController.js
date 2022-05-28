@@ -24,7 +24,7 @@ exports.validateAtFirstStep = catchErrors(async (req, res) => {
 exports.markAttendence = catchErrors(async (req, res) => {
     const { attCode } = req.body
     const validCode = await isCodeValid(attCode)
-    if (!validCode) return res.status(400).json(errorResponse('Attendence Code is invalid or is Expired'))
+    if (!validCode) return res.status(400).json(errorResponse('Attendence Code is Expired'))
     const markedAlready = await isAttendenceMarked(req.user._id)
     if (markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))
 
