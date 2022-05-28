@@ -1,4 +1,4 @@
-import { Button, Box, Paper, TextField, Typography } from '@mui/material'
+import { Button, Box, Paper, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { generateAttCode } from '../../../../apis/adminApis'
 import Loading from '../../../../components/Loading'
@@ -29,7 +29,7 @@ const GenerateCode = ({ setReload }) => {
         }
         setLoading(false)
     }
-    
+
     return (
         <>
             <Paper component={Box} elevation={5} p={4}>

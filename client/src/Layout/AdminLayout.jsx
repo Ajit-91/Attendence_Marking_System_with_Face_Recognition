@@ -1,5 +1,6 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router'
+import Announcements from '../views/admin/Announcements'
 import AttendenceCode from '../views/admin/AttendenceCode'
 import AttHistory from '../views/admin/AttHistory'
 
@@ -9,7 +10,7 @@ const AdminLayout = () => {
         <Routes>
             <Route path='/attendence-code' element={<AttendenceCode />} />
             <Route path='/attendence-history' element={<AttHistory />} />
-            <Route path='/announcement' element={<div>Admin home page</div>} />
+            <Route path='/announcements' element={<Announcements />} />
             <Route path='*' element={<Navigate to="/attendence-code" />} />
         </Routes>
     </div>

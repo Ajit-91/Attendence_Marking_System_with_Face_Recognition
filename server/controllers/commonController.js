@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Announcement = require('../models/Announcement');
 const catchErrors = require('../utils/catchErrors');
 const { successResponse, errorResponse } = require('../utils/response');
 const sendToken = require('../utils/sendToken');
@@ -85,4 +86,9 @@ exports.getSignedUrlForS3 = catchErrors(async (req, res) => {
     })
 
     return res.status(200).json(successResponse("success", urls))
+})
+
+exports.getAnnouncements = catchErrors(async (req, res) => {
+    const announcmnts = await Announcement.find().sort({createdAt : 'desc'})
+    res.status(200).json(successResponse('success', announcmnts))
 })

@@ -22,6 +22,11 @@ const studentRoutes = [
 
 const adminRoutes = [
     {
+        path: "/announcements",
+        name: "Announcements",
+        icon: AdminPanelSettingsIcon
+    },
+    {
         path: "/attendence-code",
         name: "Attendence Code",
         icon: AdminPanelSettingsIcon

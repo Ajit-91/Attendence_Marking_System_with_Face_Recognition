@@ -48,3 +48,17 @@ export const getAttndenceHistory = async () => {
     }
     return await fetchApi(route, options)
 }
+
+export const makeAnnouncement = async (body) => {
+    const route = '/api/admin/make-announcement'
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            authorization: `token ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(body)
+    }
+
+    return await fetchApi(route, options)
+}

@@ -1,14 +1,16 @@
-import { Box } from '@mui/system'
+import { Container } from '@mui/material'
 import React from 'react'
 import Dashboard from '../../../components/Dashboard'
+import AnnouncementList from '../../../components/AnnouncementList'
 
 const Home = () => {
+
   return (
     <>
         <Dashboard page='Home'>
-            <Box>
-                <h1>This is home page</h1>
-            </Box>
+            <Container maxWidth='md'>
+                <AnnouncementList />
+            </Container>
         </Dashboard>
     </>
   )

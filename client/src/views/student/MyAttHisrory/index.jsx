@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { getMyAttendence } from '../../../apis/studentApis'
 import Dashboard from '../../../components/Dashboard'
 import Loading from '../../../components/Loading'

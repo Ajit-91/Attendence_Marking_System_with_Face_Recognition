@@ -101,3 +101,14 @@ export const deleteImagesFromS3 = async(objects) => {
 
     return await fetchApi(route, options)
 }
+
+export const getAnnouncements = async () => {
+    const route =  '/api/get-announcements'
+    const options = {
+        method: "GET",
+        headers : {
+            authorization : `token ${localStorage.getItem('token')}`
+        }
+    }
+    return await fetchApi(route, options)
+}

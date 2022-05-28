@@ -4,6 +4,7 @@ const { successResponse, errorResponse } = require('../utils/response')
 const AttendenceCode = require('../models/AttendenceCode');
 const { getCode } = require('../utils/AttendenceUtils');
 const Attendence = require('../models/Attendence');
+const Announcement = require('../models/Announcement');
 
 
 exports.registerStudent = catchErrors(async (req, res) => {
@@ -52,4 +53,15 @@ exports.getAttndenceHistory = catchErrors(async (req, res) => {
         .populate('student')
     
     res.status(200).json(successResponse('success', attHistory))
+})
+
+exports.makeAnnouncement = catchErrors(async (req, res) => {
+    const {description} = req.body
+    if(!description) return res.status(400).json(errorResponse('description is required'))
+
+    const announcement  = new Announcement({
+        description
+    })
+    const savedAnncmnt = await announcement.save()
+    res.status(200).json(successResponse('success', savedAnncmnt))
 })
