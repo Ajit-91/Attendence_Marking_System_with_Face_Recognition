@@ -34,6 +34,31 @@ const Camera = ({ labels, code }) => {
         }
     }, [videoRef])
 
+    const markMyAttendence = async () => {
+        try {
+            if (imgSrc && imageRef) {
+                setLoadForRecognition(true)
+                const res = await recognizeFaces(imageRef.current, canvasRef.current, labels)
+                console.log({ recogRes: res })
+
+                const found = res.find((match) => match.label === user?.name)
+                if (found) {
+                    const res = await markAttendence({ attCode: code })
+                    if (res?.error === false) {
+                        alert('Your attendence is marked')
+                    }
+                } else {
+                    alert('Please Try Again')
+                }
+                setLoadForRecognition(false)
+            }
+        } catch (error) {
+            setLoadForRecognition(false)
+            alert('something went wrong')
+            console.log('Face recognition error', error)
+        }
+    }
+
     useEffect(() => {
         console.log('video starting')
         Promise.all([
@@ -46,58 +71,30 @@ const Camera = ({ labels, code }) => {
         }).catch(err => {
             console.log('models loading error', err)
         })
+    }, [])
 
+    useEffect(() => {
         return () => {
             stopVideo()
         }
     }, [])
 
-    useEffect(() => {
-        console.log({ imageRef })
-        const fun = async () => {
-            try {
-                if (imgSrc && imageRef) {
-                    setLoadForRecognition(true)
-                    const res = await recognizeFaces(imageRef.current, canvasRef.current, labels)
-                    console.log({ recogRes: res })
-
-                    const found = res.find((match) => match.label === user?.name)
-                    if (found) {
-                        const res = await markAttendence({ attCode: code })
-                        if (res?.error === false) {
-                            alert('Your attendence is marked')
-                        }
-                    } else {
-                        alert('Please Try Again')
-                    }
-                    setLoadForRecognition(false)
-                }
-            } catch (error) {
-                setLoadForRecognition(false)
-                alert('something went wrong')
-                console.log('Face recognition error', error)
-            }
-
-        }
-        fun()
-    }, [imgSrc])
-
     return (
         <>
             {loading ? <Loading /> : (
-                <Box width='100%'>
+                <Box width='100%' mt={4}>
                     {loadForRecognition && <Loading />}
-                    <Grid container spacing={2}>
+                    <Grid container spacing={2} >
                         <Grid item xs={12} lg={6} md={6}>
                             <Webcam
-                                style={{ zIndex: 2, position: 'relative', width: '100%', height: '100%', }}
+                                style={{ zIndex: 2, width: '100%', }}
                                 ref={videoRef}
                                 muted
                                 screenshotFormat="image/jpeg"
                                 autoPlay
                             />
                             <Button
-                                sx={{ mx: 'auto', mt: 4, display: 'block' }}
+                                sx={{ mt: 3 }}
                                 variant='outlined'
                                 onClick={capture}
                             >Capture
@@ -105,26 +102,27 @@ const Camera = ({ labels, code }) => {
                         </Grid>
                         <Grid item xs={12} lg={6} md={6}>
                             {imgSrc && (
-                                <>
-                                    <div style={{ position: 'relative', width: '100%', height: '100%', zIndex: 1 }}>
-                                        <img
-                                            src={imgSrc}
-                                            alt='user'
-                                            ref={imageRef}
-                                        />
-                                        <canvas
-                                            ref={canvasRef}
-                                            style={{ position: 'absolute', left: 0, top: 0, zIndex: 3 }}
-                                        >
-                                        </canvas>
-                                    </div>
+                                // <>
+                                <div style={{ position: 'relative', width: '100%', height: '100%', zIndex: 1 }}>
+                                    <img
+                                        src={imgSrc}
+                                        style={{ width: '100%' }}
+                                        alt='user'
+                                        ref={imageRef}
+                                    />
+                                    <canvas
+                                        ref={canvasRef}
+                                        style={{ position: 'absolute', left: 0, top: 0, zIndex: 3 }}
+                                    >
+                                    </canvas>
                                     <Button
-                                        sx={{ mx: 'auto', mt: 4, display: 'block' }}
+                                        sx={{ mt: 3 }}
                                         variant='outlined'
-                                        onClick={capture}
-                                    >Capture
+                                        onClick={markMyAttendence}
+                                    >Mark Attendence
                                     </Button>
-                                </>
+                                </div>
+                                // </>
                             )}
                         </Grid>
                     </Grid>
