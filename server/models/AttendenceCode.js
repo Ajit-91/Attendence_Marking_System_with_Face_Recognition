@@ -12,6 +12,9 @@ const attendenceCodeSchema = new mongoose.Schema({
         unique : true,
         index : true
     },
+    validity : {
+        type : Number
+    },
     expiresAt : {
         type : Date,
         required : true

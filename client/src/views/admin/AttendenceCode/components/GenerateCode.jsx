@@ -1,42 +1,67 @@
-import { Button, Card, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import { Button, Box, Paper, TextField, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { generateAttCode } from '../../../../apis/adminApis'
-import Dashboard from '../../../../components/Dashboard'
+import Loading from '../../../../components/Loading'
 
-const GenerateCode = ({setReload}) => {
+const GenerateCode = ({ setReload }) => {
     const [subject, setSubject] = useState('')
-    const [data, setData] = useState()
+    const [validity, setValidity] = useState('')
+    const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        if (validity) {
+            let minutes = Number(validity)
+            if (minutes < 10 || minutes > 120) {
+                setError(true)
+            } else {
+                setError(false)
+            }
+        }
+    }, [validity])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const res = await generateAttCode({subject})
-        if(res?.error === false){
-            setData(res?.data)
+        setLoading(true)
+        const res = await generateAttCode({ subject, validity })
+        if (res?.error === false) {
             setReload(prev => !prev)
         }
+        setLoading(false)
     }
+    
     return (
         <>
-            <Dashboard page='Attendence Code'>
-                <Card>
-                    <form onSubmit={handleSubmit}>
+            <Paper component={Box} elevation={5} p={4}>
+                {loading && <Loading />}
+                <form onSubmit={handleSubmit}>
                     <TextField
                         label='Subject'
-                        margin='dense'
+                        placeholder='Enter Subject'
                         fullWidth
+                        required
                         value={subject}
-                        onChange={(e)=>setSubject(e.target.value)}
+                        onChange={(e) => setSubject(e.target.value)}
                     />
-                    <Button variant='contained' type='submit'>Submit</Button>
-                    </form>
-                </Card>
-
-                {data && (
-                <Card sx={{mt : 3}}>
-                    <Typography> {data?.subject} : {data?.code} </Typography>
-                </Card>
-                )}
-            </Dashboard>
+                    <TextField
+                        label='Validity'
+                        type='number'
+                        error={error}
+                        margin='normal'
+                        helperText='Validity  must lie between 10 to 120 minutes'
+                        fullWidth
+                        required
+                        value={validity}
+                        onChange={(e) => setValidity(e.target.value)}
+                    />
+                    <Button
+                        variant='contained'
+                        type='submit'
+                        disabled={error === false && subject ? false : true}
+                    >Submit
+                    </Button>
+                </form>
+            </Paper>
         </>
     )
 }

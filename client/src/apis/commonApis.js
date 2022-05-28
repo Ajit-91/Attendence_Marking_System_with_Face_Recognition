@@ -8,6 +8,18 @@ export const getEnrollmentNo = async () => {
     return await fetchApi(route, options)
 }
 
+export const checkIfAlreadyRegistered = async (body) => {
+    const route =  '/api/check-if-already-registered'
+    const options = {
+        method: "POST",
+        headers: { 
+            "Content-Type" : "application/json",
+         },
+        body : JSON.stringify(body)
+    }
+    return await fetchApi(route, options)
+}
+
 export const register = async (body) => {
     const route =  '/api/register'
     const options = {

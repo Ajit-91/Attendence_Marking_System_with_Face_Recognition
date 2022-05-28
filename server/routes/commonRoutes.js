@@ -3,13 +3,15 @@ const { loginUser,
             fetchEnrollmentNo, 
             registerUser, 
             getSignedUrlForS3,
-            fetchUser 
+            fetchUser,
+            checkIfAlreadyRegistered
         } = require("../controllers/commonController");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const router = express.Router()
 
 router.get('/get-enrollment-no', fetchEnrollmentNo)
 router.get('/fetch-user', isAuthenticated, fetchUser)
+router.post('/check-if-already-registered', checkIfAlreadyRegistered)
 router.post('/register', registerUser)
 router.post('/login', loginUser)
 

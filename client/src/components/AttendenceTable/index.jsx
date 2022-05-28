@@ -9,10 +9,10 @@ const AttendenceTable = ({ rows }) => {
         <Table stickyHeader={true} >
           <TableHead sx={{ backgroundColor: 'black' }} >
             <TableRow>
-              <TableCell >Name</TableCell>
-              <TableCell >Enrollment No</TableCell>
-              <TableCell >Date</TableCell>
-              <TableCell >Subject</TableCell>
+              <TableCell align='center'>Name</TableCell>
+              <TableCell align='center'>Enrollment No</TableCell>
+              <TableCell align='center'>Date</TableCell>
+              <TableCell align='center'>Subject</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -21,7 +21,7 @@ const AttendenceTable = ({ rows }) => {
                 key={row.name}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell >
+                <TableCell align='center' >
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Avatar
                       variant='rounded'
@@ -31,9 +31,12 @@ const AttendenceTable = ({ rows }) => {
                     <Typography >{row?.student?.name}</Typography>
                   </div>
                 </TableCell>
-                <TableCell >{row?.student?.enrollmentNo}</TableCell>
-                <TableCell >{new Date(row?.createdAt)}</TableCell>
-                <TableCell >{row?.attCode?.subject}</TableCell>
+                <TableCell align='center' >{row?.student?.enrollmentNo}</TableCell>
+                <TableCell align='center' >
+                  {new Date(row?.createdAt).toDateString()} {" "}
+                  at {new Date(row?.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </TableCell>
+                <TableCell align='center' >{row?.attCode?.subject}</TableCell>
               </TableRow>
             ))}
           </TableBody>

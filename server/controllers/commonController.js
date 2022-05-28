@@ -20,15 +20,18 @@ exports.fetchEnrollmentNo = catchErrors(async (req, res) => {
     let enrollmentNo = prefix + '1640322'
     res.status(200).json(successResponse('success', {enrollmentNo}))
 })
+exports.checkIfAlreadyRegistered = catchErrors(async (req, res) => {
+    const {enrollmentNo} = req.body
+    const foundUser = await User.findOne({ enrollmentNo })
+    if (foundUser) return res.status(400).json(errorResponse("Enrollment No Already registered"))
+    res.status(200).json(successResponse('Enrollment no not registered'))
+})
 
 exports.registerUser = catchErrors(async (req, res) => {
     const { name, enrollmentNo, password, images } = req.body
     if (!name || !enrollmentNo || !password || !images) {
         return res.status(400).json(errorResponse("one or more fields required"))
     }
-
-    const foundUser = await User.findOne({ enrollmentNo })
-    if (foundUser) return res.status(400).json(errorResponse("enrollmentNo Already registered"))
 
     const user = new User({
         ...req.body

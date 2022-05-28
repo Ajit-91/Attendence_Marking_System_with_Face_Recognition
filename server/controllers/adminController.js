@@ -24,14 +24,17 @@ exports.registerStudent = catchErrors(async (req, res) => {
 }) 
 
 exports.generateAttCode = catchErrors (async (req, res) => {
-    const {subject} = req.body
+    const {subject, validity} = req.body
+    let minutes = Number(validity)
+    console.log({minutes})
     const code = getCode()
-    const expiresAt = Date.now() + 15 * 60 * 1000; // expires after 15 minutes of creation
+    const expiresAt = Date.now() + minutes * 60 * 1000; // expires after given  minutes of creation
 
     const attCode = new AttendenceCode({
         code,
         expiresAt,
-        subject
+        subject,
+        validity : minutes
     })
 
     const savedAttCode = await attCode.save()

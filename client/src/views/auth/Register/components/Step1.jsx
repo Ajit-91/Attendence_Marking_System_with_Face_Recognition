@@ -1,6 +1,7 @@
 import { Button,  Paper, TextField, Box, Container } from '@mui/material'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { checkIfAlreadyRegistered } from '../../../../apis/commonApis'
 import { SET_FORM_DETAILS } from '../../../../redux/slices/formSlice'
 
 
@@ -10,15 +11,20 @@ const Step1 = ({setStepCount, setActiveStep}) => {
     const [enrollmentNo, setEnrollmentNo] = useState('')
     const dispatch = useDispatch()
 
-    const handleNext = (e) => {
+    const handleNext = async (e) => {
         e.preventDefault()
-        dispatch(SET_FORM_DETAILS({
-            name,
-            enrollmentNo,
-            password
-        }))
-        setStepCount(prev => prev + 1)
-        setActiveStep(prev => prev + 1)
+        const res = await checkIfAlreadyRegistered({enrollmentNo})
+        if(res?.error === false){
+            dispatch(SET_FORM_DETAILS({
+                name,
+                enrollmentNo,
+                password
+            }))
+            setStepCount(prev => prev + 1)
+            setActiveStep(prev => prev + 1)
+        }else{
+            alert(res?.message || 'something went wrong')
+        }
     }
     return (
         <>
@@ -44,6 +50,7 @@ const Step1 = ({setStepCount, setActiveStep}) => {
                     />
                     <TextField
                         label='Password'
+                        type='password'
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         fullWidth

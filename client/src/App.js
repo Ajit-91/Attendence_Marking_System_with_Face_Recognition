@@ -17,20 +17,26 @@ const App = () => {
   useEffect(() => {
     const getUserAndLoadModels = async () => {
       const res = await fetchUser()
+      console.log({ fetchUser: res })
       if (res?.error === false) {
         dispatch(SET_USER(res?.data))
-        Promise.all([
-          faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URI),
-          faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URI),
-          faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_URI),
-        ]).then(() => {
-          console.log('models loaded')
+        if (res?.data?.user?.role === 'STUDENT') {
+          Promise.all([
+            faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URI),
+            faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URI),
+            faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_URI),
+          ]).then(() => {
+            console.log('models loaded')
+            setLoading(false)
+          }).catch(err => {
+            console.log('models loading error', err)
+          })
+        } else {
           setLoading(false)
-        }).catch(err => {
-          console.log('models loading error', err)
-        })
+        }
+      } else {
+        setLoading(false)
       }
-      setLoading(false)
 
     }
     getUserAndLoadModels()

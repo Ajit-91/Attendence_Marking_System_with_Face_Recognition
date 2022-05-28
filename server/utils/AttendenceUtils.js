@@ -10,7 +10,7 @@ exports.getDateString = () => {
 
 exports.isCodeValid = async (attCode) => {
     const foundCode = await AttendenceCode.findOne({ code: attCode, expiresAt: { $gt: Date.now() } })
-    if (foundCode) return true
+    if (foundCode) return {valid : true, data : foundCode}
     else return false
 }
 
