@@ -45,7 +45,7 @@ const Camera = ({ labels, code }) => {
                         alert(res?.message)
                     }
                 } else {
-                    alert('Please Try Again')
+                    alert('Cannot recognise the face associated with your account, Please Try Again')
                 }
                 setLoadForRecognition(false)
             }
