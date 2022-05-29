@@ -2,8 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const { mongoose } = require('mongoose')
-// const path = require('path')
-// const cookieParser = require('cookie-parser')
+const path = require('path')
 const app = express()
 
 // connecting to db
@@ -20,7 +19,6 @@ app.use(express.json({
 }))
 app.use(express.urlencoded({extended : true}))
 app.use(cors({ origin: true, credentials: true }))
-// app.use(cookieParser())
 
 //  -----------Routes-----------------------------
 app.use("/api", require("./server/routes/commonRoutes"))
@@ -29,14 +27,14 @@ app.use("/api/student", require("./server/routes/studentRoutes"))
 
 // ----------deployment---------------------------
 
-// if(process.env.NODE_ENV === "production"){
-//     console.log(path.join(__dirname, "frontend", "build", "index.html"))
-//     app.use(express.static(path.join(__dirname, "frontend", "build")))
+if(process.env.NODE_ENV === "production"){
+    console.log(path.join(__dirname, "client", "build", "index.html"))
+    app.use(express.static(path.join(__dirname, "client", "build")))
 
-//     app.get('*', (req, res) => {
-//         res.sendFile(path.join(__dirname, "frontend", "build", "index.html"))
-//     })
-// }
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, "client", "build", "index.html"))
+    })
+}
 
 // ----------deployment---------------------------
 

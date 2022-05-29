@@ -13,15 +13,16 @@ const loadLabeledImages = (labels) => {
                     console.log({detections})
                     descriptions.push(detections.descriptor)
                 }
-
             return new faceapi.LabeledFaceDescriptors(label?.name, descriptions)
         })
     )
 }
 
 export const recognizeFaces = async (image, canvas, labels) => {
-
+    console.log('working please wait')
     const labeledDescriptors = await loadLabeledImages(labels)
+    console.log('finished loading descriptors')
+
     const faceMatcher = new faceapi.FaceMatcher(labeledDescriptors, 0.7)
     
         canvas.innerHtml = faceapi.createCanvasFromMedia(image)
@@ -42,6 +43,6 @@ export const recognizeFaces = async (image, canvas, labels) => {
                 const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() })
                 drawBox.draw(canvas)
             })
-
+            console.log('finished')
         return results
 }

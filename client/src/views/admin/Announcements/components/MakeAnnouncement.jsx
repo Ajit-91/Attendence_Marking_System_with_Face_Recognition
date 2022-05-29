@@ -38,7 +38,13 @@ const MakeAnnouncement = ({setReload}) => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
             />
-            <Button type='submit' variant='contained' sx={{mt : 4}} >Announce</Button>
+            <Button 
+                type='submit' 
+                variant='contained' 
+                sx={{mt : 4}} 
+                disabled={!description ? true : false}
+            >Announce
+            </Button>
             </form>
         </Paper>
     </>

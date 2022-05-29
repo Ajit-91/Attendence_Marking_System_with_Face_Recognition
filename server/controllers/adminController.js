@@ -51,6 +51,7 @@ exports.getAttndenceHistory = catchErrors(async (req, res) => {
     const attHistory = await Attendence.find()
         .populate('attCode')
         .populate('student')
+        .sort({createdAt : 'desc'})
     
     res.status(200).json(successResponse('success', attHistory))
 })
