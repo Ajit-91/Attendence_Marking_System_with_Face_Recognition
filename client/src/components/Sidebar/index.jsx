@@ -13,8 +13,6 @@ const Sidebar = ({routes}) => {
     const navigate = useNavigate()
 
     const isActive = (route) => {
-        console.log({path : location.pathname})
-        console.log({route : route})
         if(location.pathname === route){
             return true
         }else{

@@ -7,7 +7,6 @@ const { isCodeValid, isAttendenceMarked, getDateString } = require("../utils/Att
 
 exports.getFaceRecognitionLabels = catchErrors(async (req, res) => {
     const info = await User.find({ role: { $ne: 'ADMIN' } }).select('name images')
-    console.log(info)
     res.status(200).json(successResponse('success', info))
 })
 
