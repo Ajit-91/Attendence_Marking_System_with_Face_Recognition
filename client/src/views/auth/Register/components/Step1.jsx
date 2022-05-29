@@ -13,6 +13,9 @@ const Step1 = ({setStepCount, setActiveStep}) => {
 
     const handleNext = async (e) => {
         e.preventDefault()
+        if(enrollmentNo.length !== 10){
+            return alert('Enrollment number must be 10 digit long')
+        }
         const res = await checkIfAlreadyRegistered({enrollmentNo})
         if(res?.error === false){
             dispatch(SET_FORM_DETAILS({
@@ -33,6 +36,7 @@ const Step1 = ({setStepCount, setActiveStep}) => {
                     <form onSubmit={handleNext} >
                     <TextField
                         label='Enrollment No'
+                        type='number'
                         placeholder='Enter 10 digit Enrollment number'
                         value={enrollmentNo}
                         onChange={(e) => setEnrollmentNo(e.target.value)}
