@@ -12,7 +12,7 @@ const Loading = ({ backdrop = true }) => {
                             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                             open
                         >
-                            <CircularProgress color="primary" size={60} />
+                            <CircularProgress color="secondary" size={60} />
                         </Backdrop>
                     </>
                     : (

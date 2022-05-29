@@ -6,9 +6,9 @@ const theme = createTheme({
         primary : {
             main : deepPurple[400],
         },
-        // secondary : {
-        //     main : deepPurple[50]
-        // },
+        secondary : {
+            main : deepPurple[50]
+        },
         white : {
             main : '#fff'
         }
