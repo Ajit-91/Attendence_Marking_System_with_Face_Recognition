@@ -1,0 +1,11 @@
+.dateTime{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.card{
+    background-image: url('../images/Card.png');
+    background-repeat: no-repeat;
+    background-size: cover;    
+}

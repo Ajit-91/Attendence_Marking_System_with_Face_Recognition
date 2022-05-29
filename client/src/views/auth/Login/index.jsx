@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 import { login } from '../../../apis/commonApis'
 import Loading from '../../../components/Loading'
 import { SET_USER } from '../../../redux/slices/userSlice'
+import "../../../assets/styles/Login.css"
 
 const Login = () => {
     const [enrollmentNo, setEnrollmentNo] = useState('')
@@ -33,13 +34,14 @@ const Login = () => {
         <Box sx={{ backgroundColor: '#f5f5f5', }} >
             {loading && <Loading />}
             <Grid container>
-                <Grid item xs={12} md={6} lg={6} sx={{ p: 0 }}>
-                    <img
-                        width={"100%"}
-                        height={"100%"}
+                <Grid item xs={12} md={6} lg={6} sx={{ p: 0 }} className='imgBox'>
+                    {/* <img
+                        // width={"100%"}
+                        // height={"100%"}
                         alt='brandImg'
-                        src='https://th.bing.com/th/id/OIP.DPNoWJ3Au35Fw58Sn2oj1wHaGo?w=188&h=180&c=7&r=0&o=5&pid=1.7'
-                    />
+                        // src='../../../assets/images/Login.png'
+                        
+                    /> */}
                 </Grid>
                 <Grid item xs={12} md={6} lg={6} sx={{ display: 'grid', placeItems: 'center', height: '100vh' }}>
                     <Paper elevation={5} component={Box} p={4} borderRadius="10px"  >
