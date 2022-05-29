@@ -9,6 +9,8 @@ const Step1 = ({ setStepCount, setCode }) => {
     const handleSubmit = async (e) => {
         try {
             e.preventDefault()
+            //  here validation is made if the entered attendence code is valid or not.
+            //  If it is valid then only we move to next step
             const res = await validateInStep1({ attCode })
             if (res?.error === false) {
                 setCode(attCode)
@@ -25,7 +27,9 @@ const Step1 = ({ setStepCount, setCode }) => {
         <>
             <Container maxWidth='md'>
                 <Paper component={Box} elevation={5} p={4} mt={4} >
-                    <Typography fontWeignt='bold' variant='body1' sx={{ mb: 3 }} >Enter the Attendence code provided by your teacher</Typography>
+                    <Typography fontWeignt='bold' variant='body1' sx={{ mb: 3 }} >
+                        Enter the Attendence code provided by your teacher
+                    </Typography>
                     <form onSubmit={handleSubmit}>
                         <TextField
                             label='Attendence code'

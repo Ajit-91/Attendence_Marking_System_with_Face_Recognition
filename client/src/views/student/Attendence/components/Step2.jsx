@@ -9,6 +9,7 @@ const Step2 = ({ code }) => {
 
     useEffect(() => {
         const fetchLabels = async () => {
+            //  Fetching the necesary labels which would be required by face recogniton model to recognise the face
             const resp = await getFaceRecognitionInfo()
             if (resp?.error === false) {
                 setLabels(resp?.data)

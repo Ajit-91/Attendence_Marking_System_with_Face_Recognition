@@ -11,6 +11,7 @@ const StudentLayout = () => {
             <Route path='/home' element={<Home />} />
             <Route path='/attendence' element={<Attendence />} />
             <Route path='/my-attendence' element={<MyAttHistory />} />
+            {/* Default Route  */}
             <Route path='*' element={<Navigate to="/home" />} />
         </Routes>
     </div>

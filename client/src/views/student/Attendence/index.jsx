@@ -4,9 +4,10 @@ import Step1 from './components/Step1'
 import Step2 from './components/Step2'
 
 const Attendence = () => {
-  const [stepCount, setStepCount] = useState(2)
+  const [stepCount, setStepCount] = useState(1)
   const [code, setCode] = useState('')
 
+  //  Conditionally rendering the component based on active step
   const getComponent = () => {
     switch (stepCount) {
       case 1:

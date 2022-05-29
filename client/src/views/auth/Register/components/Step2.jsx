@@ -24,7 +24,7 @@ const Step2 = () => {
 
     const capture = useCallback(async () => {
         const imageSrc = videoRef.current.getScreenshot();
-        //  converting uri to file so that we can upload on s3
+        //  converting  data url to file so that we can upload on s3
         let file = await fetch(imageSrc)
             .then(r => r.blob())
             .then(blobFile => {
@@ -52,19 +52,8 @@ const Step2 = () => {
         const resp = await register(body)
         if (resp?.error === false) {
             dispatch(SET_USER(resp?.data))
-            Promise.all([
-                faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URI),
-                faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URI),
-                faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_URI),
-              ]).then(() => {
-                console.log('models loaded')
-                setLoading(false)
-              }).catch(err => {
-                console.log('models loading error', err)
-              })
-        }else{
-            setLoading(false)
         }
+        setLoading(false)
     }
 
     return (

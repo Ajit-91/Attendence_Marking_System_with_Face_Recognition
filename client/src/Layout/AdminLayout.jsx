@@ -11,6 +11,7 @@ const AdminLayout = () => {
             <Route path='/attendence-code' element={<AttendenceCode />} />
             <Route path='/attendence-history' element={<AttHistory />} />
             <Route path='/announcements' element={<Announcements />} />
+            {/* Default Route  */}
             <Route path='*' element={<Navigate to="/attendence-code" />} />
         </Routes>
     </div>

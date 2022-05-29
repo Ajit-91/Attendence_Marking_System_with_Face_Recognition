@@ -9,6 +9,7 @@ const AuthLayout = () => {
         <Routes>
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
+            {/* Default Route  */}
             <Route path='*' element={<Navigate to="/login" />} />
         </Routes>
     </div>

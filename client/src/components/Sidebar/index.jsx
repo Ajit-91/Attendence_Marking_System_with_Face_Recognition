@@ -30,7 +30,12 @@ const Sidebar = ({routes}) => {
             <Divider />
             <List>
                 {routes.map((route, index) => (
-                    <ListItem style={{backgroundColor : `${isActive(route.path) ? '#7e57c2' : ''}`}} button key={index} onClick={()=>navigate(route.path)}>
+                    <ListItem 
+                        style={{backgroundColor : `${isActive(route.path) ? '#7e57c2' : ''}`}} 
+                        button 
+                        key={index} 
+                        onClick={()=>navigate(route.path)}
+                    >
                         <ListItemIcon color='primary' style={{color : `${isActive(route.path) ? 'white' : ''}`}}>
                             {<route.icon/>}
                         </ListItemIcon>

@@ -16,6 +16,7 @@ const Camera = ({ labels, code }) => {
     const imageRef = useRef(null)
     const user = useSelector(selectUser)
 
+    //  function the capture the screenshot
     const capture = useCallback(() => {
         const imageSrc = videoRef.current.getScreenshot();
         setImgSrc(imageSrc);
@@ -29,14 +30,16 @@ const Camera = ({ labels, code }) => {
         }
     }, [videoRef])
 
+    //  main function to mark the attendence
     const markMyAttendence = async () => {
         try {
             if (imgSrc && imageRef) {
-                setLoadForRecognition(true)
+                setLoadForRecognition(true) // set the loading to  true
                 const res = await recognizeFaces(imageRef.current, canvasRef.current, labels)
                 console.log({ recogRes: res })
 
                 const found = res.find((match) => match.label === user?.name)
+                // if the result label of the face recognition is same as the user name who has logged in currently then only attendence is marked
                 if (found) {
                     const res = await markAttendence({ attCode: code })
                     if (res?.error === false) {
@@ -56,6 +59,7 @@ const Camera = ({ labels, code }) => {
         }
     }
 
+    //  Stops the stream when component is unmounted 
     useEffect(() => {
         return () => {
             stopVideo()
