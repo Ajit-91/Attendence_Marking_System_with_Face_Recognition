@@ -15,7 +15,8 @@ exports.validateAtFirstStep = catchErrors(async (req, res) => {
     const { attCode } = req.body
     const validCode = await isCodeValid(attCode)
     if (!validCode) return res.status(400).json(errorResponse('Attendence Code is invalid or is Expired'))
-    const markedAlready = await isAttendenceMarked(req.user._id)
+
+    const markedAlready = await isAttendenceMarked(req.user._id, validCode._id)
     if (markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))
 
     res.status(200).json(successResponse('success'))
@@ -46,6 +47,7 @@ exports.getMyAttendence = catchErrors(async (req, res) => {
     const attHistory = await Attendence.find({ student: req.user._id })
         .populate('attCode')
         .populate('student')
+        .sort({createdAt : 'desc'})
 
     res.status(200).json(successResponse('success', attHistory))
 })

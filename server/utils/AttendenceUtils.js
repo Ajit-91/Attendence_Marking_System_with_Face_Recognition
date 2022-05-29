@@ -14,9 +14,9 @@ exports.isCodeValid = async (attCode) => {
     else return false
 }
 
-exports.isAttendenceMarked = async (studentId) => {
+exports.isAttendenceMarked = async (studentId, attCode) => {
     const dateString = this.getDateString()
-    const foundAtt = await Attendence.findOne({ student: studentId, dateString })
+    const foundAtt = await Attendence.findOne({ student: studentId, dateString, attCode })
     if (foundAtt) return true
     else return false
 }
