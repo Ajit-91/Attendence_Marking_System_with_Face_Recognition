@@ -1,6 +1,11 @@
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
 import HomeIcon from '@mui/icons-material/Home';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import HistoryIcon from '@mui/icons-material/History';
+import CoPresentIcon from '@mui/icons-material/CoPresent';
+
+import CampaignIcon from '@mui/icons-material/Campaign';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
 
 const studentRoutes = [
     {
@@ -11,12 +16,12 @@ const studentRoutes = [
     {
         path: "/attendence",
         name: "Mark Attendence",
-        icon: CloudUploadIcon
+        icon: CoPresentIcon
     },
     {
         path: "/my-attendence",
         name: "My Attendence",
-        icon: CloudUploadIcon
+        icon: HistoryIcon
     },
 ]
 
@@ -24,17 +29,17 @@ const adminRoutes = [
     {
         path: "/announcements",
         name: "Announcements",
-        icon: AdminPanelSettingsIcon
+        icon: CampaignIcon
     },
     {
         path: "/attendence-code",
         name: "Attendence Code",
-        icon: AdminPanelSettingsIcon
+        icon: VpnKeyIcon
     },
     {
         path: "/attendence-history",
         name: "All Attendences",
-        icon: AdminPanelSettingsIcon
+        icon: AnalyticsIcon
     },
 ]
 export {studentRoutes, adminRoutes}
