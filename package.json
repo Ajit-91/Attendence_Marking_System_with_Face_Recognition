@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "install-dependencies" : "cd client && npm install",
+    "static-build" : "cd client && npm run build",
+    "build" : "npm run install-dependencies && npm run static-build",
     "start": "node app.js"
   },
   "repository": {
