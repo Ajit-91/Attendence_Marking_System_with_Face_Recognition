@@ -67,26 +67,26 @@ exports.fetchUser = catchErrors(async (req, res) => {
 
 // =========uploading images to s3==============
 
-exports.getSignedUrlForS3 = catchErrors(async (req, res) => {
-    const s3 = new aws.S3({
-        accessKeyId: process.env.S3_ACCESS_KEY_ID,
-        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-        region: process.env.S3_BUCKET_REGION
-    })
+// exports.getSignedUrlForS3 = catchErrors(async (req, res) => {
+//     const s3 = new aws.S3({
+//         accessKeyId: process.env.S3_ACCESS_KEY_ID,
+//         secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+//         region: process.env.S3_BUCKET_REGION
+//     })
 
-    const { fileNames, folder } = req.body
+//     const { fileNames, folder } = req.body
 
-    const urls = fileNames.map((item) => {
-        return s3.getSignedUrl('putObject', {
-            Bucket: process.env.S3_BUCKET_NAME,
-            Key: folder + '/' + Date.now() + '-' + item,
-            Expires: 600,
-            ContentType: 'image/*',
-        });
-    })
+//     const urls = fileNames.map((item) => {
+//         return s3.getSignedUrl('putObject', {
+//             Bucket: process.env.S3_BUCKET_NAME,
+//             Key: folder + '/' + Date.now() + '-' + item,
+//             Expires: 600,
+//             ContentType: 'image/*',
+//         });
+//     })
 
-    return res.status(200).json(successResponse("success", urls))
-})
+//     return res.status(200).json(successResponse("success", urls))
+// })
 
 exports.getAnnouncements = catchErrors(async (req, res) => {
     const announcmnts = await Announcement.find().sort({createdAt : 'desc'})
