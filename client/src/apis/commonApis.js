@@ -55,9 +55,7 @@ export const fetchUser = async () => {
     return await fetchApi(route, options)
 }
 
-
 // ------------Image upload to S3-------------------------------------
-
 
 // export const getUrls = async(body) => {
 //     const route = '/api/get-signed-url'
