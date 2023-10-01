@@ -31,7 +31,7 @@ export const recognizeFaces = async (image, canvas, labels) => {
     try {
         const labeledDescriptors = await loadLabeledImages(labels)
         console.log('finished loading descriptors')
-    
+        console.log({labeledDescriptors})
         const faceMatcher = new faceapi.FaceMatcher(labeledDescriptors, 0.7)
         
             canvas.innerHtml = faceapi.createCanvasFromMedia(image)
