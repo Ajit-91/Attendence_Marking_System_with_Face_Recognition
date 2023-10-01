@@ -12,7 +12,7 @@ const loadLabeledImages = async (labels) => {
                         const img = await faceapi.fetchImage(label?.images[i]) // put img url here
                         const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
                         console.log({detections})
-                        if( detections ) {
+                        if(detections) {
                             descriptions.push(detections.descriptor)
                         }
                     }
