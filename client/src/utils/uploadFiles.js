@@ -1,23 +1,19 @@
-import { getUrls, sendToS3 } from '../apis/commonApis';
 
+export const uploadFiles = async (files) => {
+    let uploadedUrls = [];
+    for (let i = 0; i < files.length; i++) {
+        const formData = new FormData();
 
-export const uploadFiles = async (files, folder = 'images') => {
-    try {
-        const fileNames = Array.from(files).map((item)=>item?.name)
-        if(fileNames){
-            const {data} = await getUrls({fileNames, folder})
-    
-            if(data){
-               let hostedUrls = await Promise.all(data.map(async (url, i)=>{
-                    await sendToS3(files[i], url)
-                    return url.split('?')[0]
-                }))
-                console.log("respurl",hostedUrls)
-                if(hostedUrls) return hostedUrls
-            }
-        }
-    } catch (error) {
-        console.log("uploadFile",error)
+        formData.append('file', files[i]);
+        formData.append('upload_preset', 'FaceRecognition')
+
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`, {
+            method: 'POST',
+            body: formData,
+        });
+        const json = await response.json();
+        console.log({uploadedImg : json})
+        uploadedUrls.push(json.secure_url);
     }
-
+    return uploadedUrls;
 }

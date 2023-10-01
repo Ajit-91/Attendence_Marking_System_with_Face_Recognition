@@ -2,7 +2,7 @@ const express = require("express");
 const { loginUser, 
             fetchEnrollmentNo, 
             registerUser, 
-            getSignedUrlForS3,
+            // getSignedUrlForS3,
             fetchUser,
             checkIfAlreadyRegistered,
             getAnnouncements
@@ -16,7 +16,7 @@ router.post('/check-if-already-registered', checkIfAlreadyRegistered)
 router.post('/register', registerUser)
 router.post('/login', loginUser)
 
-router.post('/get-signed-url', getSignedUrlForS3)
+// router.post('/get-signed-url', getSignedUrlForS3)
 
 router.get('/get-announcements', isAuthenticated, getAnnouncements)
 
