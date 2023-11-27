@@ -13,7 +13,7 @@ const Home = () => {
             <Container maxWidth='md'>
               <Typography variant='h4' color='primary' >Hi, {user?.name} </Typography>
               <Typography sx={{mb : 4, mt : 1}} variant='h6' color='' >These are the announcements made by your teacher</Typography>
-                <AnnouncementList />
+                <AnnouncementList userType={'STUDENT'} />
             </Container>
         </Dashboard>
     </>

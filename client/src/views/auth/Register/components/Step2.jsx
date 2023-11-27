@@ -41,17 +41,22 @@ const Step2 = () => {
     }
 
     const handleSubmit = async () => {
-        setLoading(true)
-        let body = step1RegisterDetails
-        const uploadedImages = await uploadFiles(images)
-        console.log({ uploadedImages })
-        body = { ...body, images: uploadedImages }
-
-        const resp = await register(body)
-        if (resp?.error === false) {
+        try {
+            setLoading(true)
+            let body = step1RegisterDetails
+            const uploadedImages = await uploadFiles(images)
+            body = { ...body, images: uploadedImages, role : 'STUDENT' }
+    
+            const resp = await register(body)
+            console.log({registerResp : resp})
+            if (resp?.error) throw new Error(resp?.message || 'Something went wrong')
             dispatch(SET_USER(resp?.data))
+                        
+        } catch (error) {
+            alert(error.message)
+        } finally {
+            setLoading(false)
         }
-        setLoading(false)
     }
 
     return (

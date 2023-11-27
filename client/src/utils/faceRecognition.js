@@ -12,7 +12,9 @@ const loadLabeledImages = async (labels) => {
                         const img = await faceapi.fetchImage(label?.images[i]) // put img url here
                         const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
                         console.log({detections})
-                        descriptions.push(detections.descriptor)
+                        if(detections) {
+                            descriptions.push(detections.descriptor)
+                        }
                     }
                 return new faceapi.LabeledFaceDescriptors(label?.name, descriptions)
             })
@@ -29,7 +31,7 @@ export const recognizeFaces = async (image, canvas, labels) => {
     try {
         const labeledDescriptors = await loadLabeledImages(labels)
         console.log('finished loading descriptors')
-    
+        console.log({labeledDescriptors})
         const faceMatcher = new faceapi.FaceMatcher(labeledDescriptors, 0.7)
         
             canvas.innerHtml = faceapi.createCanvasFromMedia(image)

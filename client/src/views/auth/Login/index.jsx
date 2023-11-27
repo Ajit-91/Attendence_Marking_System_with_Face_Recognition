@@ -48,6 +48,7 @@ const Login = () => {
                         <form onSubmit={handleSubmit} >
                             <TextField
                                 label='Enrollment No'
+                                type='number'
                                 fullWidth
                                 required
                                 margin='normal'
@@ -75,14 +76,34 @@ const Login = () => {
                             variant='subtitle2'
                         >Don't have Account ?
                         </Typography>
-                        <Typography
-                            color='primary'
-                            align='center'
-                            sx={{ cursor: 'pointer' }}
-                            variant='subtitle2'
-                            onClick={() => navigate('/register')}
-                        >Register
-                        </Typography>
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: '10px',
+                                marginTop: '10px'
+                            }}
+                        >
+                            <Typography
+                                color='primary'
+                                component='span'
+                                align='center'
+                                sx={{ cursor: 'pointer' }}
+                                variant='subtitle2'
+                                onClick={() => navigate('/register')}
+                            >Register as Student
+                            </Typography>
+                            <Typography
+                                color='primary'
+                                component='span'
+                                align='center'
+                                sx={{ cursor: 'pointer' }}
+                                variant='subtitle2'
+                                onClick={() => navigate('/register', { state: { isTeacher: true } })}
+                            >Register as Teacher
+                            </Typography>
+                        </div>
                     </Paper>
                 </Grid>
             </Grid>

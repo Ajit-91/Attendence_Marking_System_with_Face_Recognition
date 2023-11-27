@@ -13,6 +13,7 @@ const StudentLayout = () => {
             <Route path='/my-attendence' element={<MyAttHistory />} />
             {/* Default Route  */}
             <Route path='*' element={<Navigate to="/home" />} />
+            {/* <Route path='*' element={<Navigate to="/attendence" />} /> */}
         </Routes>
     </div>
   )

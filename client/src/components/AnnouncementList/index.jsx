@@ -1,19 +1,30 @@
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useEffect, useState } from 'react'
-import { getAnnouncements } from '../../apis/commonApis'
+import { getAnnouncements as getAnnouncementsForStudent } from '../../apis/studentApis'
+import { getAnnouncements as getAnnouncementsForAdmin } from '../../apis/adminApis'
 import AnnouncementCard from '../AnnouncementCard'
 import Loading from '../Loading'
 
-const AnnouncementList = ({ reload }) => {
+const AnnouncementList = ({ reload, userType }) => {
     const [announcements, setAnnouncements] = useState([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchAnnoncmnts = async () => {
-            const res = await getAnnouncements()
-            if (res?.error === false) {
+            try {
+                let res;
+                if (userType === 'ADMIN'){
+                    res = await getAnnouncementsForAdmin()
+                }else{
+                    res = await getAnnouncementsForStudent()
+                }
+
+                if (res?.error) throw new Error(res?.message || 'Unable to fetch announcements') 
                 setAnnouncements(res?.data)
+            } catch (error) {
+                alert(error?.message || 'something went wrong')
+            } finally {
                 setLoading(false)
             }
         }
@@ -26,7 +37,7 @@ const AnnouncementList = ({ reload }) => {
                     <>
                         {announcements.map((item, i) => (
                             <Box mb={3} key={i} >
-                                <AnnouncementCard data={item} />
+                                <AnnouncementCard data={item} userType={userType} />
                             </Box>
                         ))}
                     </>

@@ -55,7 +55,9 @@ export const fetchUser = async () => {
     return await fetchApi(route, options)
 }
 
+
 // ------------Image upload to S3-------------------------------------
+
 
 // export const getUrls = async(body) => {
 //     const route = '/api/get-signed-url'
@@ -99,14 +101,3 @@ export const fetchUser = async () => {
 
 //     return await fetchApi(route, options)
 // }
-
-export const getAnnouncements = async () => {
-    const route =  '/api/get-announcements'
-    const options = {
-        method: "GET",
-        headers : {
-            authorization : `token ${localStorage.getItem('token')}`
-        }
-    }
-    return await fetchApi(route, options)
-}

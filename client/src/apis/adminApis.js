@@ -38,8 +38,13 @@ export const getAllAttCodes = async () => {
     return await fetchApi(route, options)
 }
 
-export const getAttndenceHistory = async () => {
-    const route = '/api/admin/get-attendence-history'
+export const getAttndenceHistory = async (queryParams) => {
+    const queryString = Object.entries(queryParams)
+        .filter(([key, value]) => value !== undefined && value !== null && value !== '')
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
+
+    const route = `/api/admin/get-attendence-history?${queryString}`
     const options = {
         method: "GET",
         headers: {
@@ -60,5 +65,16 @@ export const makeAnnouncement = async (body) => {
         body: JSON.stringify(body)
     }
 
+    return await fetchApi(route, options)
+}
+
+export const getAnnouncements = async () => {
+    const route =  '/api/admin/get-announcements'
+    const options = {
+        method: "GET",
+        headers : {
+            authorization : `token ${localStorage.getItem('token')}`
+        }
+    }
     return await fetchApi(route, options)
 }

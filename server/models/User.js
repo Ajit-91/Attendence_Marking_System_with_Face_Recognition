@@ -24,7 +24,19 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : true,
         select : false
-    }
+    },
+    batch: {
+        type: String,
+        required: function () {
+          return this.role === 'STUDENT';
+        },
+      },
+      branch: {
+        type: String,
+        required: function () {
+          return this.role === 'STUDENT';
+        },
+      },
 }, {timestamps : true})
 
 

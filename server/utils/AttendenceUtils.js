@@ -2,9 +2,9 @@ const Attendence = require("../models/Attendence")
 const AttendenceCode = require("../models/AttendenceCode")
 const { customAlphabet } = require('nanoid');
 
-exports.getDateString = () => {
-    const today = new Date()
-    const dateString = today.getDate() + '_' + today.getMonth() + '_' + today.getFullYear().toString().slice(-2)
+exports.getDateString = (dateStr) => {
+    const date = new Date(dateStr || Date.now())
+    const dateString = date.getDate() + '_' + (date.getMonth() + 1) + '_' + date.getFullYear().toString().slice(-2)
     return dateString
 }
 

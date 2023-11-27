@@ -3,7 +3,8 @@ const { registerStudent,
             generateAttCode, 
             getAllAttCodes, 
             getAttndenceHistory,
-            makeAnnouncement
+            makeAnnouncement,
+            getAnnouncements
         } = require("../controllers/adminController");
 const isAdmin = require("../middlewares/isAdmin");
 const isAuthenticated = require("../middlewares/isAuthenticated");
@@ -14,5 +15,6 @@ router.post('/generate-attendence-code', isAuthenticated, isAdmin, generateAttCo
 router.get('/get-all-attendence-codes', isAuthenticated, isAdmin, getAllAttCodes)
 router.get('/get-attendence-history', isAuthenticated, isAdmin, getAttndenceHistory)
 router.post('/make-announcement', isAuthenticated, isAdmin, makeAnnouncement)
+router.get('/get-announcements', isAuthenticated, getAnnouncements)
 
 module.exports = router

@@ -5,7 +5,6 @@ const { loginUser,
             // getSignedUrlForS3,
             fetchUser,
             checkIfAlreadyRegistered,
-            getAnnouncements
         } = require("../controllers/commonController");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const router = express.Router()
@@ -17,8 +16,6 @@ router.post('/register', registerUser)
 router.post('/login', loginUser)
 
 // router.post('/get-signed-url', getSignedUrlForS3)
-
-router.get('/get-announcements', isAuthenticated, getAnnouncements)
 
 
 module.exports = router

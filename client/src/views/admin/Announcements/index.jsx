@@ -12,7 +12,7 @@ const Announcements = () => {
             <MakeAnnouncement setReload={setReload} />
         </Container>
         <Container maxWidth='md'>
-        <AnnouncementList reload={reload} />
+        <AnnouncementList reload={reload} userType={'ADMIN'} />
         </Container>
     </Dashboard >
   )

@@ -3,7 +3,7 @@ const Announcement = require('../models/Announcement');
 const catchErrors = require('../utils/catchErrors');
 const { successResponse, errorResponse } = require('../utils/response');
 const sendToken = require('../utils/sendToken');
-const aws = require('aws-sdk');
+// const aws = require('aws-sdk');
 
 
 // ============Login User===============
@@ -29,8 +29,11 @@ exports.checkIfAlreadyRegistered = catchErrors(async (req, res) => {
 })
 
 exports.registerUser = catchErrors(async (req, res) => {
-    const { name, enrollmentNo, password, images } = req.body
-    if (!name || !enrollmentNo || !password || !images) {
+    const { name, enrollmentNo, password, role, } = req.body
+    if (!name || !enrollmentNo || !password) {
+        return res.status(400).json(errorResponse("one or more fields required"))
+    }
+    if(role === 'STUDENT' && !req.body.batch && !req.body.branch){
         return res.status(400).json(errorResponse("one or more fields required"))
     }
 
@@ -87,8 +90,3 @@ exports.fetchUser = catchErrors(async (req, res) => {
 
 //     return res.status(200).json(successResponse("success", urls))
 // })
-
-exports.getAnnouncements = catchErrors(async (req, res) => {
-    const announcmnts = await Announcement.find().sort({createdAt : 'desc'})
-    res.status(200).json(successResponse('success', announcmnts))
-})
