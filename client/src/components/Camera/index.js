@@ -40,17 +40,24 @@ const Camera = ({ labels, code }) => {
 
                 const found = res.find((match) => match.label === user?.name)
                 // if the result label of the face recognition is same as the user name who has logged in currently then only attendence is marked
+                let msg;
                 if (found) {
                     const res = await markAttendence({ attCode: code })
                     if (res?.error === false) {
-                        alert('Your attendence is marked')
+                        // alert('Your attendence is marked')
+                        msg = 'Your attendence is marked';
                     }else{
-                        alert(res?.message)
+                        // alert(res?.message)
+                        msg = res?.message;
                     }
                 } else {
-                    alert('Cannot recognise the face associated with your account, Please Try Again')
+                    // alert('Cannot recognise the face associated with your account, Please Try Again')
+                    msg = 'Cannot recognise the face associated with your account, Please Try Again';
                 }
                 setLoadForRecognition(false)
+                setTimeout(() => {
+                    alert(msg)
+                }, 1000)
             }
         } catch (error) {
             setLoadForRecognition(false)
