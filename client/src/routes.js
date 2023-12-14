@@ -8,11 +8,11 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 
 const studentRoutes = [
-    // {
-    //     path: "/home",
-    //     name: "Home",
-    //     icon: HomeIcon
-    // },
+    {
+        path: "/home",
+        name: "Home",
+        icon: HomeIcon
+    },
     {
         path: "/attendence",
         name: "Mark Attendence",
@@ -26,11 +26,11 @@ const studentRoutes = [
 ]
 
 const adminRoutes = [
-    // {
-    //     path: "/announcements",
-    //     name: "Announcements",
-    //     icon: CampaignIcon
-    // },
+    {
+        path: "/announcements",
+        name: "Announcements",
+        icon: CampaignIcon
+    },
     {
         path: "/attendence-code",
         name: "Attendence Code",
