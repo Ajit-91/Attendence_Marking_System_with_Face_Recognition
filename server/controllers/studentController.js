@@ -28,7 +28,7 @@ exports.markAttendence = catchErrors(async (req, res) => {
     const validCode = await isCodeValid(attCode)
     console.log({validCode})
     if (!validCode) return res.status(400).json(errorResponse('Attendence Code is Expired'))
-    const markedAlready = await isAttendenceMarked(req.user._id, attCode)
+    const markedAlready = await isAttendenceMarked(req.user._id, validCode.data._id)
     if (markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))
 
     const dateString = getDateString()
