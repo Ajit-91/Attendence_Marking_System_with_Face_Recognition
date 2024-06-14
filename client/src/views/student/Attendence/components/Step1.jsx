@@ -1,6 +1,7 @@
 import { TextField, Button, Container, Paper, Box, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { validateInStep1 } from '../../../../apis/studentApis'
+import getLocation from '../../../../utils/location'
 
 const Step1 = ({ setStepCount, setCode }) => {
 
@@ -11,7 +12,8 @@ const Step1 = ({ setStepCount, setCode }) => {
             e.preventDefault()
             //  here validation is made if the entered attendence code is valid or not.
             //  If it is valid then only we move to next step
-            const res = await validateInStep1({ attCode })
+            const coordinates = await getLocation();
+            const res = await validateInStep1({ attCode, coordinates })
             if (res?.error === false) {
                 setCode(attCode)
                 setStepCount(2)
@@ -19,6 +21,7 @@ const Step1 = ({ setStepCount, setCode }) => {
                 alert(res?.message || 'something went wrong')
             }
         } catch (error) {
+            alert(error.message || 'something went wrong')
             console.log('validateInStep1 error', error)
         }
     }

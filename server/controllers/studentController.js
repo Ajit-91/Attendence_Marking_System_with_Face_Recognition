@@ -2,7 +2,7 @@ const Attendence = require("../models/Attendence");
 const catchErrors = require("../utils/catchErrors");
 const User = require('../models/User')
 const { successResponse, errorResponse } = require("../utils/response");
-const { isCodeValid, isAttendenceMarked, getDateString } = require("../utils/AttendenceUtils");
+const { isCodeValid, isAttendenceMarked, getDateString, isValidLocation } = require("../utils/AttendenceUtils");
 const Announcement = require("../models/Announcement");
 
 
@@ -13,9 +13,12 @@ exports.getFaceRecognitionLabels = catchErrors(async (req, res) => {
 })
 
 exports.validateAtFirstStep = catchErrors(async (req, res) => {
-    const { attCode } = req.body
+    const { attCode, coordinates } = req.body
     const validCode = await isCodeValid(attCode)
     if (!validCode) return res.status(400).json(errorResponse('Attendence Code is invalid or is Expired'))
+
+    const validLocation = await isValidLocation(attCode, coordinates[0], coordinates[1]);
+    if (!validLocation) return res.status(400).json(errorResponse('You are not in the valid location to mark your Attendence'));
 
     const markedAlready = await isAttendenceMarked(req.user._id, validCode._id)
     if (markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))

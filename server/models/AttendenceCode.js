@@ -30,7 +30,21 @@ const attendenceCodeSchema = new mongoose.Schema({
     expiresAt: {
         type: Date,
         required: true
+    },
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            default: 'Point',
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
     }
 }, { timestamps: true })
+
+attendenceCodeSchema.index({ location: '2dsphere' })
 
 module.exports = mongoose.model('AttendenceCode', attendenceCodeSchema, 'AttendenceCode')

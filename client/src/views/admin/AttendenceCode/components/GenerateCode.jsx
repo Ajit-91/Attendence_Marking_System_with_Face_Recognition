@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { generateAttCode } from '../../../../apis/adminApis'
 import Loading from '../../../../components/Loading'
 import { batchInfo, branchInfo } from '../../../../constants/institutionInfo'
+import getLocation from '../../../../utils/location'
 
 const GenerateCode = ({ setReload }) => {
     const [subject, setSubject] = useState('')
@@ -24,18 +25,27 @@ const GenerateCode = ({ setReload }) => {
     }, [validity])
 
     const handleSubmit = async (e) => {
+        try{
         e.preventDefault()
-        setLoading(true)
-        const res = await generateAttCode({ 
-            subject, 
-            validity,
-            branch,
-            batch 
-        })
-        if (res?.error === false) {
-            setReload(prev => !prev)
+            setLoading(true)
+            const coordinates = await getLocation();
+            const res = await generateAttCode({ 
+                subject, 
+                validity,
+                branch,
+                batch,
+                coordinates
+            })
+            if (res?.error === false) {
+                setReload(prev => !prev)
+            }
+        } catch(err){
+            console.log(err)
+            alert(err.message || "Something went wrong")
+        } finally {
+            setLoading(false)
         }
-        setLoading(false)
+     
     }
 
     return (

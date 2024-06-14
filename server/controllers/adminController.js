@@ -25,7 +25,7 @@ exports.registerStudent = catchErrors(async (req, res) => {
 }) 
 
 exports.generateAttCode = catchErrors (async (req, res) => {
-    const {subject, validity, batch, branch} = req.body
+    const {subject, validity, batch, branch, coordinates} = req.body
     let minutes = Number(validity)
     console.log({minutes})
     const code = getCode()
@@ -38,7 +38,10 @@ exports.generateAttCode = catchErrors (async (req, res) => {
         batch,
         branch,
         generatedBy : req.user._id,
-        validity : minutes
+        validity : minutes,
+        location : {
+          coordinates
+        }
     })
 
     const savedAttCode = await attCode.save()
