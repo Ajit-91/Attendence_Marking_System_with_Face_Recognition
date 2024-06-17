@@ -9,6 +9,7 @@ import AuthLayout from "./Layout/AuthLayout";
 import "./assets/styles/App.css";
 import { fetchUser } from "./apis/commonApis";
 import Loading from "./components/Loading";
+import { warmupModel } from "./utils/faceRecognition";
 
 const App = () => {
   const dispatch = useDispatch()
@@ -28,28 +29,52 @@ const App = () => {
     getUser()
   }, [])
 
-  //  if User is STUDENT then only we load the models as they require only from Student side
 
   useEffect(() => {
-    if(user?.role === 'STUDENT'){
-      Promise.all([
-        faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URI),
-        faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URI),
-        faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_URI),
-      ]).then(() => {
-        console.log('models loaded')
-        setLoading(false)
-      }).catch(err => {
-        console.log('models loading error', err)
-      })
-    }else{
-      setLoading(false)
-    }
-  }, [user])
+    const loadAndWarmUpModels = async () => {
+      if (!window.modelsLoaded) {
+        try {
+          await Promise.all([
+            faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URI),
+            faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URI),
+            faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_URI),
+          ]);
+          console.log('Models loaded successfully');
+          await warmupModel(); 
+          window.modelsLoaded = true;
+        } catch (err) {
+          console.error('Error loading models:', err);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    loadAndWarmUpModels();
+    // if(!window.modelsLoaded){
+    //   Promise.all([
+    //     faceapi.nets.faceLandmark68Net.loadFromUri(MODELS_URI),
+    //     faceapi.nets.faceRecognitionNet.loadFromUri(MODELS_URI),
+    //     faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS_URI),
+    //   ]).then(() => {
+    //     console.log('models loaded')
+    //     warmupModel()
+    //   }).then(() => {
+    //     setLoading(false)
+    //     window.modelsLoaded = true
+    //   }).catch(err => {
+    //     console.log('error loading models', err)
+    //   })
+    // }else{
+    //   setLoading(false)
+    // }
+  }, [])
 
   return (
     <>
-      {loading ? <Loading backdrop={false} /> : (
+      {loading ? <Loading backdrop={false} msg={"Loading Models, this may take some time..."} /> : (
         <>
         {/* Here we render the layouts conditionally based on the user fetched */}
           {

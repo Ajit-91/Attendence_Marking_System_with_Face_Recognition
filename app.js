@@ -3,11 +3,14 @@ const express = require('express')
 const cors = require('cors')
 const { mongoose } = require('mongoose')
 const path = require('path')
+const { loadModels, prepareFaceMatcher, } = require('./server/utils/faceRecogUtil')
 const app = express()
 
 // connecting to db
-mongoose.connect(process.env.DB_URI).then(()=>{
+mongoose.connect(process.env.DB_URI).then(async ()=>{
     console.log('connection succesfull')
+    await prepareFaceMatcher()
+    // await recogniseFaceTest()
 }).catch(err=>console.log(err))
 
 const PORT = process.env.PORT || 8001
@@ -38,6 +41,20 @@ if(process.env.NODE_ENV === "production"){
 
 // ----------deployment---------------------------
 
-app.listen(PORT, ()=>{
-    console.log(`server started at port ${PORT}`)
+
+// const changeStream = User.watch();
+// changeStream.on('change', async () => {
+//     await prepareFaceMatcher();
+// });
+
+const startServer = () => {
+    app.listen(PORT, () => {
+        console.log(`Server started at port ${PORT}`)
+    })
+}
+
+loadModels().then(() => {
+    startServer()
+}).catch(err => {
+    console.log(err)
 })

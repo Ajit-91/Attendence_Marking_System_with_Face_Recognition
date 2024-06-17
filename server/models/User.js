@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    faceDescriptor: {
+        type: [Number], // Array of numbers (floats)
+        select : false
+    },
     images : [String],
     enrollmentNo : {
         type : String,

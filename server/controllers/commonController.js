@@ -3,6 +3,7 @@ const Announcement = require('../models/Announcement');
 const catchErrors = require('../utils/catchErrors');
 const { successResponse, errorResponse } = require('../utils/response');
 const sendToken = require('../utils/sendToken');
+const { updateFaceMatcher } = require('../utils/faceRecogUtil');
 // const aws = require('aws-sdk');
 
 
@@ -33,7 +34,7 @@ exports.registerUser = catchErrors(async (req, res) => {
     if (!name || !enrollmentNo || !password) {
         return res.status(400).json(errorResponse("one or more fields required"))
     }
-    if(role === 'STUDENT' && !req.body.batch && !req.body.branch){
+    if(role === 'STUDENT' && !req.body.batch && !req.body.branch && !req.body.faceDescriptor){
         return res.status(400).json(errorResponse("one or more fields required"))
     }
 
@@ -42,6 +43,10 @@ exports.registerUser = catchErrors(async (req, res) => {
     })
 
     const savedUser = await user.save()
+    if(role === 'STUDENT'){
+        updateFaceMatcher(`${savedUser.name} (${savedUser.enrollmentNo})`, savedUser.faceDescriptor)
+    }
+   
     if(savedUser){
         sendToken(savedUser, res)
     }

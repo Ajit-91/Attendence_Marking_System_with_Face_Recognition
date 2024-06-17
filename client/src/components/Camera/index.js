@@ -3,7 +3,7 @@ import Webcam from "react-webcam";
 import "../../assets/styles/webcam.css"
 import { Box, Button, Grid } from '@mui/material';
 import Loading from '../../components/Loading'
-import { recognizeFaces } from '../../utils/faceRecognition';
+import { drawLabeledRect, detectFace, recognizeFaces } from '../../utils/faceRecognition';
 import { useSelector } from 'react-redux'
 import { selectUser } from '../../redux/slices/userSlice'
 import { markAttendence } from '../../apis/studentApis';
@@ -66,6 +66,29 @@ const Camera = ({ labels, code }) => {
         }
     }
 
+    const markAttendanceV2 = async () => {
+        try {
+            if (imgSrc && imageRef) {
+                setLoadForRecognition(true)
+                const detection = await detectFace(imageRef.current)
+                // if(detection.descriptor.length)
+                const faceDescriptor = Array.from(detection.descriptor)
+                const res = await markAttendence({ attCode: code, faceDescriptor })
+                if (res?.error === false) {
+                    alert('Your attendence is marked')
+                    drawLabeledRect(imageRef.current, canvasRef.current, detection, res?.data?.resultLabel)
+                } else {
+                    alert(res?.message)
+                }
+            }
+        } catch (error) {
+            console.log('Face recognition error', error)
+            alert(error.message || 'Could not recognize the face, Please ensure your face is visible and try again')
+        } finally {
+            setLoadForRecognition(false)
+        }
+    }
+
     //  Stops the stream when component is unmounted 
     useEffect(() => {
         return () => {
@@ -110,7 +133,7 @@ const Camera = ({ labels, code }) => {
                                     <Button
                                         sx={{ mt: 3 }}
                                         variant='outlined'
-                                        onClick={markMyAttendence}
+                                        onClick={markAttendanceV2}
                                     >Mark Attendence
                                     </Button>
                                 </div>

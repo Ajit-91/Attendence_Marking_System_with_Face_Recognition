@@ -1,6 +1,6 @@
-import { Button, Grid, Paper,  Typography } from '@mui/material'
+import { Button, Grid, Paper, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import React, { useCallback,  useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import Webcam from 'react-webcam'
@@ -10,10 +10,13 @@ import { uploadFiles } from '../../../../utils/uploadFiles'
 import Loading from '../../../../components/Loading';
 import { SET_USER } from '../../../../redux/slices/userSlice';
 import { selectFormDetails } from '../../../../redux/slices/formSlice';
+import { detectFace } from '../../../../utils/faceRecognition';
 
 const Step2 = () => {
     const [images, setImages] = useState([])
     const videoRef = useRef(null)
+    const imgRef = useRef(null)
+    const canvasRef = useRef(null)
     const [turnVideo, setTurnVideo] = useState(false)
     const [previewImages, setPreviewImages] = useState([])
     const [loading, setLoading] = useState(false)
@@ -42,16 +45,19 @@ const Step2 = () => {
 
     const handleSubmit = async () => {
         try {
+            console.log("submitting register form")
             setLoading(true)
             let body = step1RegisterDetails
+            const { descriptor } = await detectFace(imgRef.current, canvasRef.current)
+            const faceDescriptor = Array.from(descriptor)
+            console.log({ faceDescriptor })
             const uploadedImages = await uploadFiles(images)
-            body = { ...body, images: uploadedImages, role : 'STUDENT' }
-    
+            body = { ...body, faceDescriptor, images: uploadedImages, role: 'STUDENT' }
             const resp = await register(body)
-            console.log({registerResp : resp})
+            console.log({ registerResp: resp })
             if (resp?.error) throw new Error(resp?.message || 'Something went wrong')
             dispatch(SET_USER(resp?.data))
-                        
+
         } catch (error) {
             alert(error.message)
         } finally {
@@ -64,31 +70,49 @@ const Step2 = () => {
             {loading && <Loading />}
             <Paper elevation={5} component={Box} p={4}>
 
-            <Grid container spacing={2} >
-                <Grid item xs={12} md={6} lg={6}>
-                    {turnVideo ? (
-                        <Webcam
-                            style={{ width: '100%' }}
-                            ref={videoRef}
-                            muted
-                            screenshotFormat="image/jpeg"
-                            autoPlay
-                        />
-                    ) : (
-                        <Box width='100%' height='100%' sx={{ display: 'grid', placeItems: 'center',  border: '2px dashed #9c27b0' }}>
-                            <Typography color='primary' align='center' variant='h5'>Please Turn On your camera</Typography>
-                        </Box>
-                    )}
+                <Grid container spacing={2} >
+                    <Grid item xs={12} md={6} lg={6}>
+                        {turnVideo ? (
+                            <Webcam
+                                style={{ width: '100%' }}
+                                ref={videoRef}
+                                muted
+                                screenshotFormat="image/jpeg"
+                                autoPlay
+                            />
+                        ) : (
+                            <Box width='100%' height='50vh' sx={{ display: 'grid', placeItems: 'center', border: '2px dashed #9c27b0' }}>
+                                <Typography color='primary' align='center' variant='h5'>Please Turn On your camera</Typography>
+                            </Box>
+                        )}
+                    </Grid>
+                    <Grid item xs={12} md={6} lg={6}>
+                        {previewImages[0] && (
+                            <div className='imgCard'>
+                                <CancelRoundedIcon className='cross' onClick={() => removeImage(0)} color='primary' />
+                                <img
+                                    src={previewImages[0]}
+                                    alt="category"
+                                    ref={imgRef}
+                                />
+                                <canvas
+                                    ref={canvasRef}
+                                    style={{ position: 'absolute', left: 0, top: 0, zIndex: 3 }}
+                                >
+                                </canvas>
+                            </div>
+                        )}
+
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} md={6} lg={6}>
-                    <div  style={{ display: 'flex', justifyContent : 'center', flexDirection : 'column', width : '100%', height : '100%' }}>
-                    <Typography 
-                        variant='h5' 
+                <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', width: '100%', height: '100%', marginTop: '40px' }}>
+                    <Typography
+                        variant='h5'
                         color='primary'
-                        fontWeight={'medium'} 
-                        align='center' 
-                        display='block' 
-                    >Please Capture 4 images. These images will be used to recognise you for marking your attendence
+                        fontWeight={'medium'}
+                        align='center'
+                        display='block'
+                    >Please Capture images. These images will be used to recognise you for marking your attendence
                     </Typography>
                     <Typography align='center' sx={{ mt: 4 }}>
                         {turnVideo && (
@@ -108,31 +132,16 @@ const Step2 = () => {
                         >{turnVideo ? 'Turn off Camera' : 'Turn On Camera'}
                         </Button>
                     </Typography>
-                    </div>
-                </Grid>
-            </Grid>
+                </div>
 
-            {previewImages.length > 0 && (
-                <Box style={{ border: '2px dashed #9c27b0' }} p={3} mt={3}>
-                    <Grid container spacing={2}>
-                        {previewImages.map((item, i) => (
-                            <Grid item xs={6} md={4} lg={3} key={i}>
-                                <ImgCard url={item}>
-                                    <CancelRoundedIcon className='cross' onClick={() => removeImage(i)} color='primary' />
-                                </ImgCard>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Box>
-            )}
 
-            <Button
-                variant='contained'
-                disabled={(images.length !== 4) ? true : false}
-                sx={{ my: 5, ml : 'auto', display: 'block' }}
-                onClick={handleSubmit}
-            >Submit
-            </Button>
+                <Button
+                    variant='contained'
+                    disabled={(images.length === 0) ? true : false}
+                    sx={{ my: 5, ml: 'auto', display: 'block' }}
+                    onClick={handleSubmit}
+                >Submit
+                </Button>
             </Paper>
 
         </>

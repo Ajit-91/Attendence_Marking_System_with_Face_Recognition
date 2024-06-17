@@ -48,6 +48,7 @@ exports.isValidLocation = async (attCode, studentLat, studentLon) => {
 exports.isAttendenceMarked = async (studentId, attCode) => {
     const dateString = this.getDateString()
     const foundAtt = await Attendence.findOne({ student: studentId, dateString, attCode })
+    console.log({dateString, foundAtt, attCode})
     if (foundAtt) return true
     else return false
 }

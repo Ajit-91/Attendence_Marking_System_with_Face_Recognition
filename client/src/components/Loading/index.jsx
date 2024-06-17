@@ -1,7 +1,7 @@
-import { Backdrop, CircularProgress } from '@mui/material'
+import { Backdrop, CircularProgress, Typography } from '@mui/material'
 import React from 'react'
 
-const Loading = ({ backdrop = true }) => {
+const Loading = ({ msg, backdrop = true }) => {
 
     return (
         <>
@@ -13,11 +13,17 @@ const Loading = ({ backdrop = true }) => {
                             open
                         >
                             <CircularProgress color="secondary" size={60} />
+                            {msg && <Typography variant='h5' color='primary'>{msg}</Typography>}
                         </Backdrop>
                     </>
                     : (
                         <div style={{ height: "100vh", width : '100%', display : 'grid', placeItems : 'center' }}>
-                            <CircularProgress color="primary" size={60}  />
+                            <div>
+                                <div style={{display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '10px'}} >
+                                    <CircularProgress color="primary" size={60}  />
+                                </div>
+                                {msg && <Typography variant='h5' color='primary'>{msg}</Typography>}
+                            </div>
                         </div>
                     )
             }
