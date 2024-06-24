@@ -3,13 +3,13 @@ const express = require('express')
 const cors = require('cors')
 const { mongoose } = require('mongoose')
 const path = require('path')
-const { loadModels, prepareFaceMatcher, } = require('./server/utils/faceRecogUtil')
+const { loadModels, } = require('./server/utils/faceRecogUtil')
 const app = express()
 
 // connecting to db
 mongoose.connect(process.env.DB_URI).then(async ()=>{
     console.log('connection succesfull')
-    await prepareFaceMatcher()
+    // await prepareFaceMatcher()
     // await recogniseFaceTest()
 }).catch(err=>console.log(err))
 

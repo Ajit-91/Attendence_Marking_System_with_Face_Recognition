@@ -15,7 +15,7 @@ const Step2 = ({ code }) => {
                 setLabels(resp?.data)
             }
         }
-        fetchLabels()
+        // fetchLabels()
     }, [])
     return (
         <>

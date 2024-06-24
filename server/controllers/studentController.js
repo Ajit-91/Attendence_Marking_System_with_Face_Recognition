@@ -4,7 +4,7 @@ const User = require('../models/User')
 const { successResponse, errorResponse } = require("../utils/response");
 const { isCodeValid, isAttendenceMarked, getDateString, isValidLocation } = require("../utils/AttendenceUtils");
 const Announcement = require("../models/Announcement");
-const { recogniseFace } = require("../utils/faceRecogUtil");
+const { recogniseFace, isFaceMatched } = require("../utils/faceRecogUtil");
 
 
 exports.getFaceRecognitionLabels = catchErrors(async (req, res) => {
@@ -37,12 +37,19 @@ exports.markAttendence = catchErrors(async (req, res) => {
     const markedAlready = await isAttendenceMarked(req.user._id, validCode.data._id)
     if (markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))
 
-    const dateString = getDateString()
+    const {faceDescriptor : expectedFaceDescriptor} = await User.findById(req.user._id).select("faceDescriptor") 
     const expectedLabel = `${req.user.name} (${req.user.enrollmentNo})`
-    const resultLabel = recogniseFace(faceDescriptor)
-    console.log({resultLabel, expectedLabel})
-    if(resultLabel !== expectedLabel) 
-      return res.status(400).json(errorResponse(`Failed to mark attendance, Expected ${expectedLabel} but got ${resultLabel}`))
+    const result = isFaceMatched(expectedFaceDescriptor, faceDescriptor)
+
+    if(!result){
+      return res.status(400).json(errorResponse(`Failed to mark attendance due to face mismatch, Expected ${expectedLabel}`))
+    }
+
+    const dateString = getDateString()
+    // const resultLabel = recogniseFace(faceDescriptor)
+    // console.log({resultLabel, expectedLabel})
+    // if(resultLabel !== expectedLabel) 
+    //   return res.status(400).json(errorResponse(`Failed to mark attendance, Expected ${expectedLabel} but got ${resultLabel}`))
 
     const att = new Attendence({
         attCode : validCode.data._id,
@@ -54,7 +61,7 @@ exports.markAttendence = catchErrors(async (req, res) => {
     const savedAtt = await att.save()
     res.status(200).json(successResponse("success", {
       ...savedAtt._doc,
-      resultLabel
+      resultLabel: expectedLabel
     }))
 })
 
