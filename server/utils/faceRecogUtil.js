@@ -116,11 +116,11 @@ const detectFace = async (file) => {
 
     const detections = await faceapi.detectSingleFace(canvasImg).withFaceLandmarks().withFaceDescriptor()
 
-    console.log("----------box-----------------",detections.detection._box)
     fs.unlinkSync(file.path);
     console.log(`file deleted - ${file.path}`)
     if (!detections) return null
-
+    
+    console.log("----------box-----------------",detections.detection._box)
     const {_x, _y, _width, _height} = detections.detection._box
     
     return {
