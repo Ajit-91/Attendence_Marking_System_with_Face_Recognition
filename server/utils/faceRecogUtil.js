@@ -1,8 +1,6 @@
 const canvas = require('canvas');
 const faceapi = require('face-api.js');
 const path = require('path');
-const User = require('../models/User');
-const fs = require('fs')
 
 // require('@tensorflow/tfjs-node')
 const { Canvas, Image, ImageData } = canvas;
@@ -116,8 +114,6 @@ const detectFace = async (file) => {
 
     const detections = await faceapi.detectSingleFace(canvasImg).withFaceLandmarks().withFaceDescriptor()
 
-    fs.unlinkSync(file.path);
-    console.log(`file deleted - ${file.path}`)
     if (!detections) return null
     
     console.log("----------box-----------------",detections.detection._box)

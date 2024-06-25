@@ -7,7 +7,7 @@ const Announcement = require("../models/Announcement");
 const { isFaceMatched, detectFace } = require("../utils/faceRecogUtil");
 const sendToken = require("../utils/sendToken");
 const { uploadToCloudinary } = require("../utils/cloudinary");
-
+const fs = require('fs')
 
 exports.registerStudent = catchErrors(async (req, res) => {
   const { name, enrollmentNo, password, batch, branch } = req.body
@@ -73,6 +73,8 @@ exports.markAttendence = catchErrors(async (req, res) => {
     if (markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))
     
     const detectionData = await detectFace(req.file)
+    fs.unlinkSync(req.file.path);
+    console.log(`file deleted - ${req.file.path}`)
     if(!detectionData){
         return res.status(400).json(errorResponse('No Face detected, Please ensure proper lighting on your face'))
     }
