@@ -14,7 +14,10 @@ const userSchema = new mongoose.Schema({
     },
     faceDescriptor: {
         type: [Number], // Array of numbers (floats)
-        select : false
+        select : false,
+        required: function () {
+            return this.role === 'STUDENT';
+          },
     },
     images : [String],
     enrollmentNo : {

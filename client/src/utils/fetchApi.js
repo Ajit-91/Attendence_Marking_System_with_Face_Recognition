@@ -13,3 +13,10 @@ export const fetchApi = async (route, options)=>{
         console.log(err)
     }
 }
+
+export   const generateFileFromPreview = async (src) => {
+    const response = await fetch(src);
+    const blobFile = await response.blob();
+    const file = new File([blobFile], `image-${Date.now()}.jpeg`, { type: "image/jpeg" });
+    return file;
+};

@@ -1,5 +1,15 @@
 import { fetchApi } from "../utils/fetchApi"
 
+export const registerStudent = async (body) => {
+    const route = '/api/student/register-student'
+    const options = {
+        method: "POST",
+        body
+    }
+
+    return await fetchApi(route, options)
+}
+
 export const getFaceRecognitionInfo = async () => {
     const route = '/api/student/get-face-recognition-info'
     const options = {
@@ -30,10 +40,9 @@ export const markAttendence = async (body) => {
     const options = {
         method: "POST",
         headers: { 
-            "Content-Type" : "application/json",
             authorization : `token ${localStorage.getItem('token')}`
          },
-        body : JSON.stringify(body)
+        body
     }
     return await fetchApi(route, options)
 }

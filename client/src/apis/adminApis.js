@@ -1,5 +1,17 @@
 import { fetchApi } from "../utils/fetchApi"
 
+export const registerAdmin = async (body) => {
+    const route = '/api/admin/register-admin'
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body)
+    }
+
+    return await fetchApi(route, options)
+}
 export const registerStudent = async (body) => {
     const route = '/api/admin/register-student'
     const options = {

@@ -4,12 +4,14 @@ const { registerStudent,
             getAllAttCodes, 
             getAttndenceHistory,
             makeAnnouncement,
-            getAnnouncements
+            getAnnouncements,
+            registerAdmin
         } = require("../controllers/adminController");
 const isAdmin = require("../middlewares/isAdmin");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const router = express.Router()
 
+router.post('/register-admin', registerAdmin)
 router.post('/register-student', isAuthenticated, isAdmin, registerStudent)
 router.post('/generate-attendence-code', isAuthenticated, isAdmin, generateAttCode)
 router.get('/get-all-attendence-codes', isAuthenticated, isAdmin, getAllAttCodes)

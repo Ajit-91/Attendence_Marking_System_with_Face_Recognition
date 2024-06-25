@@ -5,7 +5,26 @@ const AttendenceCode = require('../models/AttendenceCode');
 const { getCode, getDateString } = require('../utils/AttendenceUtils');
 const Attendence = require('../models/Attendence');
 const Announcement = require('../models/Announcement');
+const sendToken = require('../utils/sendToken');
 
+
+exports.registerAdmin = catchErrors(async (req, res) => {
+  const { name, enrollmentNo, password, } = req.body
+  if (!name || !enrollmentNo || !password) {
+      return res.status(400).json(errorResponse("one or more fields required"))
+  }
+
+  const user = new User({
+      ...req.body,
+      role: 'ADMIN'
+  })
+
+  const savedUser = await user.save()
+ 
+  if(savedUser){
+      sendToken(savedUser, res)
+  }
+}) 
 
 exports.registerStudent = catchErrors(async (req, res) => {
     const { name, enrollmentNo, password } = req.body

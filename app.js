@@ -17,9 +17,7 @@ const PORT = process.env.PORT || 8001
 
 
 // ----------MiddleWares--------------------------
-app.use(express.json({
-    verify : (req, _, buffer) => req['rawBody'] = buffer
-}))
+app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 app.use(cors({ origin: true, credentials: true }))
 

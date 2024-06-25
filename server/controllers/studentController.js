@@ -4,8 +4,43 @@ const User = require('../models/User')
 const { successResponse, errorResponse } = require("../utils/response");
 const { isCodeValid, isAttendenceMarked, getDateString, isValidLocation } = require("../utils/AttendenceUtils");
 const Announcement = require("../models/Announcement");
-const { recogniseFace, isFaceMatched } = require("../utils/faceRecogUtil");
+const { isFaceMatched, detectFace } = require("../utils/faceRecogUtil");
+const sendToken = require("../utils/sendToken");
+const { uploadToCloudinary } = require("../utils/cloudinary");
 
+
+exports.registerStudent = catchErrors(async (req, res) => {
+  const { name, enrollmentNo, password, batch, branch } = req.body
+  if (!name || !enrollmentNo || !password || !batch || !branch || !req.file) {
+      return res.status(400).json(errorResponse("one or more fields required"))
+  }
+  const file = req.file
+  const data = await detectFace(file)
+  
+  if(!data){
+    return res.status(400).json(errorResponse('No Face detected, Please ensure proper lighting on your face'))
+  }
+  const { faceDescriptor, box } = data
+  const url = await uploadToCloudinary(file) 
+  if(!url) return res.status(500).json(errorResponse('Could not upload image, Please try again'))
+
+  const user = new User({
+      role: 'STUDENT',
+      name,
+      enrollmentNo,
+      password,
+      batch,
+      branch,
+      images : [url],
+      faceDescriptor: Array.from(faceDescriptor)
+  })
+
+  const savedUser = await user.save()
+ 
+  if(savedUser){
+      sendToken(savedUser, res, {box})
+  }
+}) 
 
 exports.getFaceRecognitionLabels = catchErrors(async (req, res) => {
     const info = await User.find({ role: { $ne: 'ADMIN' } }).select('name images')
@@ -30,16 +65,21 @@ exports.validateAtFirstStep = catchErrors(async (req, res) => {
 })
 
 exports.markAttendence = catchErrors(async (req, res) => {
-    const { attCode, faceDescriptor } = req.body
+    const { attCode } = req.body
     const validCode = await isCodeValid(attCode)
     // console.log({validCode})
     if (!validCode) return res.status(400).json(errorResponse('Attendence Code is Expired'))
     const markedAlready = await isAttendenceMarked(req.user._id, validCode.data._id)
     if (markedAlready) return res.status(400).json(errorResponse('You have already marked your Attendence'))
-
+    
+    const detectionData = await detectFace(req.file)
+    if(!detectionData){
+        return res.status(400).json(errorResponse('No Face detected, Please ensure proper lighting on your face'))
+    }
+    const { faceDescriptor, box } = detectionData
     const {faceDescriptor : expectedFaceDescriptor} = await User.findById(req.user._id).select("faceDescriptor") 
     const expectedLabel = `${req.user.name} (${req.user.enrollmentNo})`
-    const result = isFaceMatched(expectedFaceDescriptor, faceDescriptor)
+    const result = isFaceMatched(new Float32Array(expectedFaceDescriptor), faceDescriptor)
 
     if(!result){
       return res.status(400).json(errorResponse(`Failed to mark attendance due to face mismatch, Expected ${expectedLabel}`))
@@ -61,6 +101,7 @@ exports.markAttendence = catchErrors(async (req, res) => {
     const savedAtt = await att.save()
     res.status(200).json(successResponse("success", {
       ...savedAtt._doc,
+      box,
       resultLabel: expectedLabel
     }))
 })

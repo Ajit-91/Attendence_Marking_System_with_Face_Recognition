@@ -1,6 +1,7 @@
 import { Button, Paper, TextField, Box, Container } from '@mui/material'
 import React, { useState } from 'react'
-import { checkIfAlreadyRegistered, register } from '../../../../apis/commonApis'
+import { checkIfAlreadyRegistered } from '../../../../apis/commonApis'
+import { registerAdmin } from '../../../../apis/adminApis'
 import { SET_USER } from '../../../../redux/slices/userSlice'
 import { useDispatch } from 'react-redux'
 import Loading from '../../../../components/Loading'
@@ -23,11 +24,10 @@ const RegisterTeacher = () => {
             const res = await checkIfAlreadyRegistered({ enrollmentNo })
             if (res?.error) throw new Error(res?.message);
                 // Api call to register teacher
-            const resp = await register({
+            const resp = await registerAdmin({
                 name,
                 enrollmentNo,
                 password,
-                role: 'ADMIN'
             })
             if (resp?.error) throw new Error(resp?.message);
             dispatch(SET_USER(resp?.data))
