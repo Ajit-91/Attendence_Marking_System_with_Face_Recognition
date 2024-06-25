@@ -11,7 +11,8 @@ const loadModels = () => {
     return Promise.all([
         faceapi.nets.faceRecognitionNet.loadFromDisk(MODEL_URL),
         faceapi.nets.faceLandmark68Net.loadFromDisk(MODEL_URL),
-        faceapi.nets.ssdMobilenetv1.loadFromDisk(MODEL_URL)
+        faceapi.nets.tinyFaceDetector.loadFromDisk(MODEL_URL)
+        // faceapi.nets.ssdMobilenetv1.loadFromDisk(MODEL_URL)
     ]);
 }
 
@@ -108,11 +109,12 @@ const isFaceMatched = (desc1, desc2) => {
 const detectFace = async (file) => {
     console.log("loading image", file.path)
     const img = await canvas.loadImage(file.path);
-    const canvasImg = faceapi.createCanvasFromMedia(img);
+    // const canvasImg = faceapi.createCanvasFromMedia(img);
 
     console.log("detecting")
 
-    const detections = await faceapi.detectSingleFace(canvasImg).withFaceLandmarks().withFaceDescriptor()
+    const detections = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor()
+    // const detections = await faceapi.detectSingleFace(canvasImg).withFaceLandmarks().withFaceDescriptor()
 
     if (!detections) return null
     
