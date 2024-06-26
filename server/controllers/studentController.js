@@ -18,6 +18,8 @@ exports.registerStudent = catchErrors(async (req, res) => {
   const data = await detectFace(file)
   
   if(!data){
+    fs.unlinkSync(req.file.path);
+    console.log(`file deleted - ${req.file.path}`)
     return res.status(400).json(errorResponse('No Face detected, Please ensure proper lighting on your face'))
   }
   const { faceDescriptor, box } = data
